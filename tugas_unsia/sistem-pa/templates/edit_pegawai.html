@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block title %}Edit Data Pegawai - PA IKN{% endblock %}
+{% block body_class %}page-edit-pegawai{% endblock %}
+{% block content %}
+<div data-body-class="">
+  <div class="edit-card">
+    <h2 class="page-title">
+      <i class="fas fa-user-edit me-2"></i> Edit Data Pegawai
+    </h2>
+    <form action="/edit_pegawai/{{ pegawai['id'] }}" method="POST" enctype="multipart/form-data" hx-post="/edit_pegawai/{{ pegawai['id'] }}" hx-swap="none" hx-encoding="multipart/form-data">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Username</label>
+          <input type="text" name="username" class="form-control" value="{{pegawai['username'] }}" required minlength="3" maxlength="50">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Password</label>
+          <input type="text" name="password" class="form-control" value="{{pegawai['password'] }}" required minlength="4" maxlength="64">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <label class="fw-bold">Nama Lengkap</label>
+          <input type="text" name="nama" class="form-control" value="{{pegawai['nama_lengkap'] }}" required minlength="3" maxlength="80">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="fw-bold">NIP</label>
+          <input type="text" name="nip" class="form-control" value="{{ pegawai['nip'] }}" required minlength="5" maxlength="18" pattern="\\d+" inputmode="numeric">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold">Jabatan (Role)</label>
+          <select name="role" class="form-select">
+            <option value="staff" {% if pegawai['role']=='staff' %}selected{% endif %}>Staff Pelayanan</option>
+            <option value="hakim" {% if pegawai['role']=='hakim' %}selected{% endif %}>Hakim</option>
+            <option value="panitera" {% if pegawai['role']=='panitera' %}selected{% endif %}>Panitera</option>
+            <option value="sekretaris" {% if pegawai['role']=='sekretaris' %}selected{% endif %}>Sekretaris</option>
+            <option value="kassubag" {% if pegawai['role']=='kassubag' %}selected{% endif %}>Kassubag</option>
+            <option value="ketua" {% if pegawai['role']=='ketua' %}selected{% endif %}>Ketua Pengadilan</option>
+            <option value="wakil_ketua" {% if pegawai['role']=='wakil_ketua' %}selected{% endif %}>Wakil Ketua</option>
+            <option value="admin_it" {% if pegawai['role']=='admin_it' %}selected{% endif %}>Admin IT</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="fw-bold text-danger">PIN 6 Digit</label>
+          <input type="text" name="pin_6digit" class="form-control" value="{{pegawai['pin_6digit'] }}" maxlength="6" minlength="6" pattern="\\d{6}" inputmode="numeric" required>
+          <small class="text-muted">Hanya angka 0-9</small>
+        </div>
+      </div>
+      <div class="row bg-light p-3 rounded mb-3">
+        <div class="col-md-6">
+          <label class="fw-bold text-success"><i class="fas fa-camera me-1"></i>
+            Ganti Pas Foto</label>
+          <input type="file" name="pas_foto" class="form-control form-control-sm" accept=".jpg,.png,.jpeg">
+          {% if pegawai['pas_foto'] %}
+          <small class="text-muted">File saat ini: {{ pegawai['pas_foto'] }}</small>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="fw-bold text-primary"><i class="fas fa-file-pdf me-1"></i> Ganti
+            PDF SK PNS</label>
+          <input type="file" name="pdf_sk_pns" class="form-control form-control-sm" accept=".pdf">
+          {% if pegawai['pdf_sk_pns'] %}
+          <small class="text-muted">File saat ini: {{ pegawai['pdf_sk_pns'] }}</small>
+          {% endif %}
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-save flex-fill">
+          <i class="fas fa-save me-2"></i> SIMPAN PERUBAHAN
+        </button>
+        <a href="/dashboard/data-pegawai" class="btn btn-secondary">
+          <i class="fas fa-times me-2"></i> BATAL
+        </a>
+      </div>
+    </form>
+  </div>
+  <div class="fixed-corner-note">
+  </div>
+</div>
+{% endblock %}

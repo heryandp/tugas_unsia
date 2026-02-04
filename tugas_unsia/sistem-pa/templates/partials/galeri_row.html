@@ -1,0 +1,12 @@
+<tr>
+  <td class="text-center">
+    <img src="{{ g['file_foto'] }}" class="img-cover-60x40" loading="lazy">
+  </td>
+  <td class="fw-bold">{{ g['judul_foto'] }}</td>
+  <td>{{ g['tanggal'] }}</td>
+  <td class="text-center">
+    <a href="/hapus_data/galeri/{{ g['id'] }}" class="btn-delete" hx-get="/hapus_data/galeri/{{ g['id'] }}" hx-target="closest tr" hx-swap="outerHTML" hx-confirm="Hapus foto ini?">
+      <i class="fas fa-trash"></i>
+    </a>
+  </td>
+</tr>

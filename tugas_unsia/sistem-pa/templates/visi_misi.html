@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Visi & Misi{% endblock %}
+{% block body_class %}page-public page-info{% endblock %}
+{% block body_style %}--page-hero-bg: url("{{ p['bg_landing'] if p else '' }}");{% endblock %}
+{% block content %}
+<div data-body-class="">
+  {% include "partials/header.html" %}
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="fw-bold mb-2">Visi & Misi</h1>
+      <p class="mb-0">Arah strategis dan komitmen pelayanan Pengadilan Agama Ibukota Nusantara.</p>
+    </div>
+  </section>
+  <div class="container my-5">
+    <div class="card shadow rounded-3 p-4 mb-4 border-0">
+      <h3 class="text-success mb-3">Visi</h3>
+      <p class="lead mb-0">
+        Terwujudnya Pengadilan Agama Ibukota Nusantara yang agung, modern, dan terpercaya.
+      </p>
+    </div>
+    <div class="card shadow rounded-3 p-4 border-0">
+      <h3 class="text-success mb-3">Misi</h3>
+      <ol class="text-muted mb-0">
+        <li>Menyelenggarakan peradilan yang sederhana, cepat, dan biaya ringan.</li>
+        <li>Meningkatkan kualitas pelayanan publik berbasis teknologi informasi.</li>
+        <li>Memperkuat integritas, transparansi, dan akuntabilitas.</li>
+        <li>Mengembangkan kompetensi sumber daya manusia peradilan.</li>
+      </ol>
+      <span class="badge mt-3 px-3 py-2 badge-ikn">PA IKN</span>
+    </div>
+  </div>
+  {% include "partials/footer.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<div class="col-12 mb-3 laporan-item" id="laporan-{{ l['id'] }}">
+  <div class="card p-3 border-danger shadow-sm">
+    <div class="d-flex justify-content-between">
+      <h5 class="text-danger">{{ l['nama_tamu'] }} <small class="text-muted fs-6">({{ l['no_hp'] }})</small></h5>
+      <div>
+        <small class="me-2">{{ l['tanggal'] }}</small>
+        {% if role == 'admin_it' %}
+        <a href="/hapus_data/laporan/{{ l['id'] }}" class="btn-delete" hx-get="/hapus_data/laporan/{{ l['id'] }}" hx-target="#laporan-{{ l['id'] }}" hx-swap="outerHTML" hx-confirm="Hapus laporan ini?"><i class="fas fa-trash"></i></a>
+        {% endif %}
+      </div>
+    </div>
+    <p class="bg-light p-2 rounded">"{{ l['isi_pesan'] }}"</p>
+    {% if l['balasan'] %}
+    <div class="alert alert-success py-2"><b>Balasan Anda:</b> {{ l['balasan'] }}</div>
+    {% else %}
+    <form action="/balas_saran" method="POST" class="mt-2" hx-post="/balas_saran" hx-target="#laporan-{{ l['id'] }}" hx-swap="outerHTML">
+      <input type="hidden" name="id_laporan" value="{{ l['id'] }}">
+      <div class="input-group">
+        <input type="text" name="balasan" class="form-control" placeholder="Tulis balasan resmi..." required minlength="3" maxlength="500">
+        <button class="btn btn-danger" type="submit">KIRIM BALASAN</button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</div>

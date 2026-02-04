@@ -1,0 +1,653 @@
+/* PA IKN Color Palette */
+:root {
+  --pa-green: #004d00;
+  --pa-light-green: #006400;
+  --pa-gold: #FFD700;
+}
+
+/* 1. Color overrides for Bootstrap components */
+.btn-success {
+  background-color: var(--pa-green) !important;
+  border-color: var(--pa-green) !important;
+}
+.btn-success:hover {
+  background-color: var(--pa-light-green) !important;
+  border-color: var(--pa-light-green) !important;
+}
+
+.bg-success {
+  background-color: var(--pa-green) !important;
+}
+
+.text-success {
+  color: var(--pa-green) !important;
+}
+
+.border-success {
+  border-color: var(--pa-green) !important;
+}
+
+/* Gold accent color */
+.btn-warning {
+  background-color: var(--pa-gold) !important;
+  border-color: var(--pa-gold) !important;
+  color: #000 !important;
+}
+
+.bg-warning {
+  background-color: var(--pa-gold) !important;
+}
+
+.text-warning {
+  color: var(--pa-gold) !important;
+}
+
+/* 2. Header styles */
+.top-header {
+  background-color: var(--pa-green);
+  color: white;
+  padding: 15px 0;
+  border-bottom: 5px solid var(--pa-gold);
+}
+.page-public .header-content {
+  display: flex;
+  align-items: center;
+}
+.page-public .logo-img {
+  width: 80px;
+  height: auto;
+  margin-right: 20px;
+}
+.page-public .site-title h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.page-public .site-title p {
+  margin: 0;
+  font-size: 14px;
+  font-style: italic;
+  color: #ddd;
+}
+.page-public .navbar {
+  background-color: var(--pa-green) !important;
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border-top: 3px solid var(--pa-gold);
+}
+.page-public .nav-link {
+  color: #ffffff !important;
+  font-weight: 600;
+  padding: 15px 20px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+.page-public .nav-link:hover,
+.page-public .nav-link:focus {
+  background-color: var(--pa-gold);
+  color: var(--pa-green) !important;
+}
+.page-public .dropdown-menu {
+  background-color: var(--pa-green);
+  border: 2px solid var(--pa-gold);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.page-public .dropdown-item {
+  color: #ffffff;
+  font-weight: 500;
+  padding: 10px 20px;
+}
+.page-public .dropdown-item:hover,
+.page-public .dropdown-item:focus {
+  background-color: var(--pa-gold);
+  color: var(--pa-green);
+}
+.page-public .dropdown-divider {
+  border-color: var(--pa-gold);
+  opacity: 0.5;
+}
+/* Active nav link */
+.page-public .nav-link.active {
+  background-color: rgba(255, 215, 0, 0.2);
+  border-bottom: 3px solid var(--pa-gold);
+}
+
+.page-public footer {
+  background: #111;
+  color: #aaa;
+  padding: 40px 0;
+  border-top: 5px solid var(--pa-gold);
+}
+.page-public .copyright {
+  font-size: 0.8rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+/* 3. Landing page hero */
+.page-landing .hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), var(--page-hero-bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+.page-landing .hero h1 {
+  color: var(--pa-gold);
+  margin-bottom: 1rem;
+}
+.page-landing .hero h3 {
+  margin-bottom: 1.5rem;
+}
+.page-landing .hero .lead {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+.page-landing .ketua-foto {
+  width: 250px;
+  height: 300px;
+  object-fit: cover;
+  border: 5px solid var(--pa-gold);
+  border-radius: 10px;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3);
+}
+.page-landing .sambutan-text {
+  text-align: justify;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+.page-landing .news-card-hover {
+  transition: transform 0.3s;
+}
+.page-landing .news-card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.page-landing .news-img {
+  height: 180px;
+  object-fit: cover;
+}
+.page-landing .gallery-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+  cursor: pointer;
+  display: block;
+}
+.page-landing .gallery-img:hover {
+  transform: scale(1.02);
+  border-color: var(--pa-gold);
+}
+@media (max-width: 768px) {
+  .page-landing .gallery-img {
+    height: 150px;
+  }
+}
+@media (max-width: 576px) {
+  .page-landing .gallery-img {
+    height: 120px;
+    border-width: 2px;
+  }
+}
+
+/* 4. Info pages (Sejarah, Visi Misi) hero */
+.page-info .page-hero {
+  background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), var(--page-hero-bg);
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  padding: 70px 0;
+}
+.page-info .badge-ikn {
+  background: var(--pa-green);
+  color: var(--pa-gold);
+}
+
+/* 5. Typing effect animation */
+.typing-effect {
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+  border-right: .15em solid orange;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: .15em;
+  animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+}
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: orange; }
+}
+
+/* 6. Dashboard sidebar */
+.page-dashboard .sidebar {
+  background: linear-gradient(180deg, var(--pa-green) 0%, #003300 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: white;
+}
+.page-dashboard .mobile-nav {
+  background: var(--pa-green);
+}
+.page-dashboard .sidebar-logo img {
+  background: white;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+.page-dashboard .nav-pills .nav-link {
+  color: #d1e7dd;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
+.page-dashboard .nav-pills .nav-link i { margin-right: 12px; width: 20px; text-align: center; }
+.page-dashboard .nav-pills .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--pa-gold);
+}
+.page-dashboard .nav-pills .nav-link.active {
+  background-color: var(--pa-gold);
+  color: var(--pa-green);
+  font-weight: bold;
+}
+
+/* 7. Login page */
+body.page-login {
+  background: linear-gradient(rgba(0, 77, 0, 0.8), rgba(0, 77, 0, 0.8)), var(--page-bg);
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+.page-login .login-card {
+  background: white;
+  width: 100%;
+  max-width: 460px;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+  text-align: center;
+  border-top: 5px solid var(--pa-gold);
+}
+.page-login .logo-img {
+  width: 80px;
+  margin-bottom: 15px;
+}
+.page-login .app-title {
+  color: var(--pa-green);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+.page-login .app-subtitle {
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 25px;
+}
+.page-login .captcha-container {
+  background-color: #e8f5e9;
+  border: 2px dashed var(--pa-green);
+  padding: 10px;
+  border-radius: 5px;
+}
+.page-login .captcha-question {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 1.15rem;
+  color: #0b5d1e;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 77, 0, 0.2);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.page-login .captcha-label {
+  font-size: 0.8rem;
+  color: var(--pa-green);
+  font-weight: bold;
+  display: block;
+  text-align: left;
+}
+.page-login .btn-login {
+  background-color: var(--pa-green);
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.page-login .btn-login:hover {
+  background-color: var(--pa-gold);
+  color: var(--pa-green);
+}
+.page-login .error-msg {
+  background-color: #ffdddd;
+  color: #d8000c;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+  border-left: 5px solid #d8000c;
+  text-align: left;
+}
+.page-login .back-link {
+  display: block;
+  margin-top: 20px;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.page-login .back-link:hover {
+  color: var(--pa-green);
+}
+
+/* 8. Password toggle positioning */
+.password-wrapper {
+  position: relative;
+}
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+}
+
+/* 9. Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .page-landing .hero {
+    height: auto;
+    min-height: 400px;
+    background-attachment: scroll;
+  }
+  .page-landing .typing-effect {
+    white-space: normal;
+    border: none;
+    animation: none;
+  }
+  .page-landing .hero h1 {
+    font-size: 2rem;
+  }
+  .page-landing .hero h3 {
+    font-size: 1.2rem;
+  }
+  .page-landing .ketua-foto {
+    width: 200px;
+    height: 240px;
+    margin-bottom: 2rem;
+  }
+  .page-public .site-title h1 {
+    font-size: 1.2rem;
+  }
+  .page-public .logo-img {
+    width: 60px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-landing .hero {
+    min-height: 350px;
+    padding: 40px 20px;
+  }
+  .page-landing .typing-effect {
+    font-size: 1.5rem;
+  }
+  .page-landing .hero h3 {
+    font-size: 1rem;
+  }
+  .page-landing .ketua-foto {
+    width: 150px;
+    height: 180px;
+  }
+  .page-landing .gallery-img {
+    height: 150px;
+  }
+  .page-login .login-card {
+    margin: 20px;
+    padding: 30px 20px;
+  }
+}
+
+/* Button animation utility */
+.btn-anim {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.btn-anim:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Page title utilities */
+.title-green {
+  color: var(--pa-green);
+}
+.page-title-green {
+  color: var(--pa-green);
+}
+
+/* Search input styling */
+.search-input {
+  border: 2px solid var(--pa-green) !important;
+  border-radius: 50px !important;
+  max-width: 400px;
+}
+.search-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 77, 0, 0.25);
+}
+
+/* Avatar/profile image */
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--pa-green);
+}
+
+/* Chat styles */
+.chat-box {
+  height: 400px;
+  overflow-y: auto;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+.chat-msg {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--pa-green);
+}
+.chat-info {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+/* Image cover utilities */
+.img-cover-50 {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+.img-cover-60x40 {
+  width: 60px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* Edit pegawai page */
+.page-edit-pegawai {
+  background: linear-gradient(135deg, var(--pa-green) 0%, #003300 100%);
+  min-height: 100vh;
+  padding: 50px 0;
+}
+.page-edit-pegawai .edit-card {
+  background: white;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-top: 5px solid var(--pa-gold);
+}
+.page-edit-pegawai .page-title {
+  color: var(--pa-green);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+.page-edit-pegawai .btn-save {
+  background-color: var(--pa-green);
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  transition: all 0.3s;
+}
+.page-edit-pegawai .btn-save:hover {
+  background-color: var(--pa-gold);
+  color: var(--pa-green);
+}
+
+/* Verify PIN page */
+.page-verify-pin {
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 77, 0, 0.85), rgba(0, 77, 0, 0.85)), var(--page-bg);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-verify-pin .pin-card {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  border-top: 5px solid var(--pa-gold);
+}
+.page-verify-pin .logo-img {
+  width: 80px;
+  margin-bottom: 20px;
+}
+.page-verify-pin .pin-title {
+  color: var(--pa-green);
+  font-weight: 800;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.page-verify-pin .pin-subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+.page-verify-pin .btn-verify {
+  background-color: var(--pa-green);
+  color: white;
+  font-weight: bold;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.page-verify-pin .btn-verify:hover {
+  background-color: var(--pa-gold);
+  color: var(--pa-green);
+}
+.page-verify-pin .error-msg {
+  background-color: #ffdddd;
+  color: #d8000c;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border-left: 5px solid #d8000c;
+}
+.page-verify-pin .back-link {
+  display: block;
+  margin-top: 20px;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.page-verify-pin .back-link:hover {
+  color: var(--pa-green);
+}
+
+/* Jadwal page */
+.page-jadwal .title-green {
+  color: var(--pa-green);
+}
+
+/* Profil page */
+.page-profil .page-title-green {
+  color: var(--pa-green);
+}
+
+/* Fixed corner note */
+.fixed-corner-note {
+  position: fixed;
+  bottom: 10px;
+  right: 15px;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+}
+
+/* Action buttons */
+.btn-edit {
+  color: #0d6efd;
+  cursor: pointer;
+}
+.btn-edit:hover {
+  color: #0a58ca;
+}
+.btn-delete {
+  color: #dc3545;
+  cursor: pointer;
+}
+.btn-delete:hover {
+  color: #bb2d3b;
+}
+
+/* Shadow inner utility */
+.shadow-inner {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+}

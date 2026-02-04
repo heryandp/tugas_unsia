@@ -1,0 +1,10 @@
+<tr>
+  <td class="fw-bold">{{ b['judul'] }}</td>
+  <td><small>{{ b['isi'][:80] }}...</small></td>
+  <td>{{ b['tanggal'] }}</td>
+  <td class="text-center">
+    <a href="/hapus_data/berita/{{ b['id'] }}" class="btn-delete" hx-get="/hapus_data/berita/{{ b['id'] }}" hx-target="closest tr" hx-swap="outerHTML" hx-confirm="Hapus berita ini?">
+      <i class="fas fa-trash"></i>
+    </a>
+  </td>
+</tr>

@@ -1,0 +1,31 @@
+<div class="col-md-6 mb-4" id="hakim-{{ r['id'] }}">
+  <div class="card h-100 border-warning shadow-sm">
+    <div class="card-header bg-warning text-dark d-flex justify-content-between">
+      <span>No: {{ r['no_perkara'] }}</span>
+      <span class="badge bg-dark">{{ r['status'] }}</span>
+    </div>
+    <div class="card-body">
+      <h6 class="card-title">{{ r['nama_suami'] }} <small>vs</small> {{ r['nama_istri'] }}</h6>
+      {% if r['tanggal_sidang'] %}
+      <div class="alert alert-info py-2 my-2">
+        <i class="fas fa-calendar-check me-2"></i>
+        <strong>Jadwal Sidang:</strong> {{ r['tanggal_sidang'] }}
+      </div>
+      {% endif %}
+      <div class="alert alert-secondary py-2 my-2"><small><b>Keluhan:</b> {{ r['keluhan'] }}</small></div>
+    <form action="/update_hakim" method="POST" hx-boost="false" hx-post="/update_hakim" hx-target="#hakim-{{ r['id'] }}" hx-swap="outerHTML">
+        <input type="hidden" name="id_perkara" value="{{ r['id'] }}">
+        <label class="form-label mt-2 fw-bold">Hasil Mediasi:</label>
+        <select name="hasil_mediasi" class="form-select form-select-sm mb-2">
+          <option value="{{ r['hasil_mediasi'] }}" selected>-- {{ r['hasil_mediasi'] }} --</option>
+          <option value="Proses Mediasi">Sedang Proses</option>
+          <option value="Berhasil (Rujuk)">BERHASIL (Rujuk Kembali)</option>
+          <option value="Gagal">GAGAL (Lanjut Sidang)</option>
+        </select>
+        <label class="form-label fw-bold">Detail/Catatan Hakim:</label>
+        <textarea name="detail_mediasi" class="form-control mb-2" rows="2" placeholder="Catatan hasil mediasi...">{{ r['detail_mediasi'] }}</textarea>
+        <button class="btn btn-dark w-100 btn-anim">UPDATE PUTUSAN</button>
+      </form>
+    </div>
+  </div>
+</div>

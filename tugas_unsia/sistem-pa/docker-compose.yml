@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "11111:5000"
+    environment:
+      - FLASK_ENV=production
+    volumes:
+      - .:/app

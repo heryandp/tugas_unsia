@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Login Sistem Informasi PA IKN{% endblock %}
+{% block body_class %}page-login d-flex align-items-center justify-content-center{% endblock %}
+{% block body_style %}--page-bg: url("{{ bg }}");{% endblock %}
+{% block content %}
+<div data-body-class="d-flex align-items-center justify-content-center">
+<div class="login-card">
+  <img src="{{ logo }}" class="logo-img" alt="Logo Instansi" loading="lazy">
+  <div class="app-title">PENGADILAN AGAMA<br>IBUKOTA NUSANTARA</div>
+  <div class="app-subtitle">Portal Sistem Informasi Pegawai</div>
+  {% if error %}
+  <div class="error-msg">
+    <i class="fas fa-exclamation-circle me-2"></i> {{ error }}
+  </div>
+  {% endif %}
+  <form method="POST">
+    <div class="mb-3 text-start">
+      <input type="text" name="username" class="form-control" placeholder="Username / NIP" required minlength="3" maxlength="50" autofocus>
+    </div>
+    <div class="mb-3 text-start password-wrapper">
+      <input type="password" name="password" class="form-control" id="login-password" placeholder="Password" required minlength="4" maxlength="64">
+      <button type="button" class="password-toggle" id="password-toggle" aria-label="Tampilkan password">
+        <i class="fas fa-eye" id="toggle-icon"></i>
+      </button>
+    </div>
+    <div class="text-start">
+      <label class="captcha-label"><i class="fas fa-shield-alt me-2"></i> Verifikasi Captcha</label>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <div class="captcha-container text-center flex-grow-1">
+          <div class="captcha-question">{{ question }}</div>
+        </div>
+        <a href="/login?new=1" class="btn btn-outline-secondary btn-sm" title="Ganti captcha">
+          <i class="fas fa-rotate"></i>
+        </a>
+      </div>
+      <input type="text" name="captcha" class="form-control" placeholder="Ketik jawaban di sini..." required minlength="1" maxlength="10" autocomplete="off">
+    </div>
+    <button type="submit" class="btn-login shadow">
+      <i class="fas fa-sign-in-alt me-2"></i> MASUK SISTEM
+    </button>
+  </form>
+  <a href="/" class="back-link">
+    <i class="fas fa-arrow-left me-1"></i> Kembali ke Website Utama
+  </a>
+</div>
+<div class="copyright">
+</div>
+</div>
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}
+{% endblock %}

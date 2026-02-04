@@ -1,0 +1,13 @@
+<!-- LAPORAN TAMU -->
+  <h3 class="mb-3 text-danger">Kotak Masuk Laporan Tamu</h3>
+  {% if role in ['kassubag', 'admin_it', 'sekretaris'] %}
+  <div class="row" id="laporan-list">
+    {% for l in laporan %}
+      {% include "partials/laporan_card.html" %}
+    {% else %}
+    <p>Tidak ada laporan masuk.</p>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-warning">Area khusus Kassubag Kepegawaian & Pimpinan.</div>
+  {% endif %}

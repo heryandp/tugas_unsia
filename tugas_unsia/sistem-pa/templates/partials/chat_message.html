@@ -1,0 +1,9 @@
+<div id="chat-box" hx-swap-oob="beforeend">
+  <div class="chat-msg {{ c['role_pengirim'] }}">
+    <div class="chat-info d-flex justify-content-between">
+      <strong>{{ c['pengirim'] }} <span class="badge bg-secondary">{{ c['role_pengirim'] }}</span></strong>
+      <span>{{ c['tanggal'] }}</span>
+    </div>
+    <p class="mb-0">{{ c['pesan'] }}</p>
+  </div>
+</div>

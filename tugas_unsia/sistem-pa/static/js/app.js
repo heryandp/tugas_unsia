@@ -1,0 +1,126 @@
+(function () {
+  function toggleSpinner(elt, on) {
+    if (!elt) return;
+    var label = elt.getAttribute("data-loading-label") || "Memproses...";
+    if (on) {
+      if (!elt.getAttribute("data-original-html")) {
+        elt.setAttribute("data-original-html", elt.innerHTML);
+      }
+      elt.disabled = true;
+      elt.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>' + label;
+    } else {
+      var original = elt.getAttribute("data-original-html");
+      if (original) {
+        elt.innerHTML = original;
+      }
+      elt.disabled = false;
+    }
+  }
+
+  function showToast(level, message) {
+    var container = document.getElementById("toast-container");
+    if (!container) return;
+    var bg = level === "success" ? "success" : level === "error" ? "danger" : level === "warning" ? "warning" : "info";
+    var wrap = document.createElement("div");
+    wrap.className = "toast align-items-center text-bg-" + bg + " border-0 mb-2";
+    wrap.setAttribute("role", "alert");
+    wrap.setAttribute("aria-live", "assertive");
+    wrap.setAttribute("aria-atomic", "true");
+    wrap.setAttribute("data-bs-delay", "4000");
+    wrap.innerHTML = '<div class="d-flex"><div class="toast-body"></div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>';
+    wrap.querySelector(".toast-body").textContent = message;
+    container.appendChild(wrap);
+    var t = new bootstrap.Toast(wrap);
+    t.show();
+  }
+
+  function applyBodyClass(root) {
+    var el = root.querySelector("[data-body-class]");
+    if (!el) {
+      return;
+    }
+    document.body.className = el.getAttribute("data-body-class") || "";
+  }
+
+  function applyBodyStyle(root) {
+    var body = document.body;
+    var val = body.getAttribute("data-body-style") || "";
+    if (!val) {
+      body.style.cssText = "";
+      return;
+    }
+    body.style.cssText = val;
+  }
+
+  function scrollToHash() {
+    if (!location.hash) {
+      return;
+    }
+    var target = document.querySelector(location.hash);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("#toast-container .toast").forEach(function (el) {
+      var t = new bootstrap.Toast(el);
+      t.show();
+    });
+    applyBodyClass(document);
+    applyBodyStyle(document);
+    scrollToHash();
+  });
+
+  document.addEventListener("htmx:afterSwap", function (evt) {
+      if (evt.detail && evt.detail.target && evt.detail.target.id === "app") {
+        applyBodyClass(evt.detail.target);
+        applyBodyStyle(evt.detail.target);
+        scrollToHash();
+      }
+    });
+
+  document.body.addEventListener("htmx:beforeRequest", function (evt) {
+    var trigger = evt.detail && evt.detail.elt;
+    if (!trigger) return;
+    if (trigger.tagName === "FORM") {
+      var submitBtn = trigger.querySelector("button[type='submit']");
+      toggleSpinner(submitBtn, true);
+    } else if (trigger.tagName === "BUTTON") {
+      toggleSpinner(trigger, true);
+    } else if (trigger.tagName === "A") {
+      trigger.setAttribute("data-hx-busy", "1");
+      trigger.classList.add("disabled");
+      trigger.style.pointerEvents = "none";
+      trigger.setAttribute("aria-busy", "true");
+    }
+  });
+
+  document.body.addEventListener("htmx:afterRequest", function (evt) {
+    var trigger = evt.detail && evt.detail.elt;
+    if (!trigger) return;
+    if (trigger.tagName === "FORM") {
+      var submitBtn = trigger.querySelector("button[type='submit']");
+      toggleSpinner(submitBtn, false);
+    } else if (trigger.tagName === "BUTTON") {
+      toggleSpinner(trigger, false);
+    } else if (trigger.tagName === "A") {
+      trigger.removeAttribute("data-hx-busy");
+      trigger.classList.remove("disabled");
+      trigger.style.pointerEvents = "";
+      trigger.removeAttribute("aria-busy");
+    }
+  });
+
+  document.body.addEventListener("htmx:wsAfterSend", function (evt) {
+    var form = evt.detail && evt.detail.elt;
+    if (form && form.matches("#chat-form")) {
+      form.reset();
+    }
+  });
+
+  document.body.addEventListener("toast", function (evt) {
+    if (!evt.detail) return;
+    showToast(evt.detail.level || "info", evt.detail.message || "");
+  });
+})();

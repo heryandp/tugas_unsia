@@ -1,0 +1,88 @@
+<!-- INPUT PERKARA (DENGAN TANGGAL SIDANG) -->
+  <h3 class="mb-3 text-success border-bottom pb-2">Pendaftaran Perkara Baru</h3>
+  {% if role in ['staff', 'admin_it'] %}
+  <form action="/tambah_perkara" method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm" hx-post="/tambah_perkara" hx-target="#perkara-body" hx-swap="afterbegin" hx-encoding="multipart/form-data" hx-on::after-request="this.reset()">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">No. Perkara</label>
+        <input type="text" name="no_perkara" class="form-control" value="{{ no_perkara_auto }}" readonly>
+        <small class="text-muted">Format otomatis: {seq}/Pdt.G/{year}/PA.IKN</small>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Tanggal Daftar</label>
+        <input type="date" name="tanggal_daftar" class="form-control" value="{{ tgl_skrg }}" required>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Biaya Pendaftaran</label>
+        <div class="input-group">
+          <span class="input-group-text">Rp</span>
+          <input type="number" name="biaya_daftar" class="form-control" placeholder="0" min="0" step="1">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Nama Pihak Suami</label>
+        <input type="text" name="nama_suami" class="form-control" required minlength="3" maxlength="80">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Nama Pihak Istri</label>
+        <input type="text" name="nama_istri" class="form-control" required minlength="3" maxlength="80">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">Keluhan / Pokok Perkara</label>
+      <textarea name="keluhan" class="form-control" rows="3" minlength="5" maxlength="500" required></textarea>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Nama Petugas Pendaftar</label>
+        <input type="text" name="nama_staff" class="form-control" value="{{ nama_user }}" required minlength="3" maxlength="80">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Tanggal Sidang</label>
+        <input type="date" name="tanggal_sidang" class="form-control" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Upload File Suami (Opsional)</label>
+        <input type="file" name="file_suami" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Upload File Istri (Opsional)</label>
+        <input type="file" name="file_istri" class="form-control">
+      </div>
+    </div>
+    <button class="btn btn-success btn-anim w-100">SIMPAN PERKARA</button>
+  </form>
+  {% else %}
+  <div class="alert alert-warning">Akses ditolak. Hanya Staff/Admin IT.</div>
+  {% endif %}
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header">Perkara Terbaru</div>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover mb-0 text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>No. Perkara</th>
+            <th>Suami</th>
+            <th>Istri</th>
+            <th>Status</th>
+            <th>Biaya</th>
+            <th>Mediasi</th>
+            <th>Sidang</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="perkara-body">
+          {% for r in perkara[:5] %}
+            {% include "partials/perkara_row.html" %}
+          {% else %}
+          <tr><td colspan="8" class="text-muted">Belum ada data.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>

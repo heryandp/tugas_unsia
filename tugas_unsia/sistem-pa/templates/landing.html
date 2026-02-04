@@ -1,0 +1,169 @@
+{% extends "layout.html" %}
+{% block title %}Pengadilan Agama Ibukota Nusantara{% endblock %}
+{% block body_class %}page-public page-landing{% endblock %}
+{% block body_style %}--page-hero-bg: url("{{ p['bg_landing'] if p else '' }}");{% endblock %}
+{% block content %}
+<div data-body-class="">
+
+    {% include "partials/header.html" %}
+
+    <div class="hero">
+        <div class="container">
+            <h1 class="display-3 fw-bold text-uppercase typing-effect hero-title">SELAMAT DATANG</h1>
+            <h3 class="mt-3">DI PORTAL DIGITAL PENGADILAN AGAMA IBUKOTA NUSANTARA</h3>
+            <p class="lead mb-5">"Melayani dengan Hati, Menjunjung Tinggi Integritas"</p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a href="/jadwal_sidang" class="btn btn-success btn-lg btn-anim px-5 shadow">
+                    <i class="fas fa-calendar-check me-2"></i> Cek Jadwal Sidang
+                </a>
+                <a href="/profil_pegawai" class="btn btn-outline-light btn-lg btn-anim px-5 shadow">
+                    <i class="fas fa-users me-2"></i> Profil Pegawai
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center">
+                    <img src="/uploads/foto_ketua_1742714560686_cuqnuq_2_1_edit.jpg" class="ketua-foto mb-3 img-fluid" loading="lazy" alt="Foto Ketua Pengadilan Agama Ibukota Nusantara" style="max-width: 100%;">
+                    <h5 class="fw-bold text-success">KETUA PENGADILAN AGAMA</h5>
+                    <span class="badge bg-warning text-dark">IBUKOTA NUSANTARA</span>
+                </div>
+                <div class="col-md-8">
+                    <h2 class="text-success border-bottom pb-2 mb-4">SAMBUTAN KETUA PENGADILAN</h2>
+                    <p class="text-secondary sambutan-text">
+                        "Assalamu'alaikum Warahmatullahi Wabarakatuh, puji syukur kehadirat Allah SWT atas hadirnya
+                        laman resmi ini sebagai wujud transformasi layanan peradilan di era baru Ibu Kota Nusantara.
+                        Selamat datang di Portal Digital Pengadilan Agama IKN, di mana kami berkomitmen teguh untuk
+                        melayani masyarakat pencari keadilan dengan sepenuh hati, menjunjung tinggi integritas, serta
+                        mengedepankan transparansi informasi berbasis teknologi informasi. Kami berharap portal ini
+                        tidak hanya berfungsi sebagai jendela informasi, tetapi juga sebagai sarana strategis untuk
+                        mendekatkan akses keadilan yang cepat, sederhana, dan berbiaya ringan bagi seluruh warga di
+                        pusat pemerintahan masa depan Indonesia ini. Wassalamu'alaikum Warahmatullahi Wabarakatuh."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="berita" class="container my-5">
+        <h3 class="text-center text-success fw-bold mb-4 border-bottom d-inline-block pb-2">BERITA & KEGIATAN TERBARU</h3>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm border-0 news-card-hover">
+                    <img src="https://via.placeholder.com/150" class="card-img-top news-img" loading="lazy" alt="Sosialisasi Hukum Keluarga">
+                    <div class="card-body">
+                        <small class="text-muted">
+                            <i class="far fa-calendar-alt"></i> 2025-11-30
+                        </small>
+                        <h5 class="card-title mt-2">Sosialisasi Hukum Keluarga</h5>
+                        <p class="card-text">Hakim memberikan penyuluhan kepada masyarakat sekitar.</p>
+                        <a href="#" class="btn btn-sm btn-outline-success">Baca Selengkapnya</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm border-0 news-card-hover">
+                    <img src="https://via.placeholder.com/150" class="card-img-top news-img" loading="lazy" alt="Kunjungan Mahkamah Agung">
+                    <div class="card-body">
+                        <small class="text-muted">
+                            <i class="far fa-calendar-alt"></i> 2025-11-30
+                        </small>
+                        <h5 class="card-title mt-2">Kunjungan Mahkamah Agung</h5>
+                        <p class="card-text">Delegasi MA meninjau lokasi gedung baru di IKN.</p>
+                        <a href="#" class="btn btn-sm btn-outline-success">Baca Selengkapnya</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm border-0 news-card-hover">
+                    <img src="https://via.placeholder.com/150" class="card-img-top news-img" loading="lazy" alt="Rapat Koordinasi Tahunan">
+                    <div class="card-body">
+                        <small class="text-muted">
+                            <i class="far fa-calendar-alt"></i> 2025-11-30
+                        </small>
+                        <h5 class="card-title mt-2">Rapat Koordinasi Tahunan</h5>
+                        <p class="card-text">Pengadilan Agama IKN mengadakan rapat tahunan untuk evaluasi kinerja.</p>
+                        <a href="#" class="btn btn-sm btn-outline-success">Baca Selengkapnya</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bg-dark py-5">
+        <div class="container text-center">
+            <h3 class="text-white fw-bold mb-4">GALERI KEGIATAN KANTOR</h3>
+<div class="row g-3">
+                <div class="col-6 col-md-4"><img src="/uploads/kegiatan_1_pahlawan2025.jpeg" class="gallery-img img-fluid w-100" loading="lazy" alt="Kegiatan Pahlawan 2025"></div>
+                <div class="col-6 col-md-4"><img src="/uploads/kegiatan_2_diskusi33.jpeg" class="gallery-img img-fluid w-100" loading="lazy" alt="Diskusi Internal"></div>
+                <div class="col-6 col-md-4"><img src="/uploads/kegiatan_3_rakor-pengawasan.jpeg" class="gallery-img img-fluid w-100" loading="lazy" alt="Rapat Koordinasi Pengawasan"></div>
+                <div class="col-6 col-md-6"><img src="/uploads/kegiatan_4_hissi-coffee-break.jpeg" class="gallery-img img-fluid w-100" loading="lazy" alt="Kegiatan Coffee Break"></div>
+                <div class="col-6 col-md-6"><img src="/uploads/kegiatan_5_prodia.jpeg" class="gallery-img img-fluid w-100" loading="lazy" alt="Kegiatan Prodia"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-7" id="laporan">
+                <div class="card shadow p-4 border-success">
+                    <h4 class="text-success mb-3">
+                        <i class="fas fa-envelope-open-text me-2"></i> KOTAK SARAN & PENGADUAN
+                    </h4>
+                    <p>Pesan Anda akan diterima langsung oleh Kassubag Kepegawaian.</p>
+                    <form action="/kirim_laporan_tamu" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" name="nama" class="form-control" required minlength="3" maxlength="80">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">No. HP / WhatsApp</label>
+                                <input type="tel" name="hp" class="form-control" required minlength="8" maxlength="15" pattern="[0-9]{8,15}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Isi Pesan / Saran</label>
+                            <textarea name="pesan" class="form-control" rows="4" required minlength="5" maxlength="500"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-anim w-100">KIRIM PESAN</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-5" id="kontak">
+                <div class="card shadow p-4 bg-success text-white h-100">
+                    <h4 class="mb-4">
+                        <i class="fas fa-headset me-2"></i> HUBUNGI KAMI
+                    </h4>
+
+                    <div class="mb-4">
+                        <h5><i class="fas fa-map-marker-alt me-2"></i> ALAMAT KANTOR</h5>
+                        <p>Jl. Sumbu Kebangsaan No. 1, Kawasan Inti Pusat Pemerintahan (KIPP), Ibu Kota Nusantara.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5><i class="fas fa-phone-alt me-2"></i> TELEPON</h5>
+                        <p class="fs-5">(021) 123-4567</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5><i class="fas fa-envelope me-2"></i> EMAIL</h5>
+                        <p class="fs-5">info@pa-ikn.go.id</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+
+</div>
+{% endblock %}

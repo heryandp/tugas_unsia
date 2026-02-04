@@ -1,0 +1,59 @@
+<header class="top-header py-3">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <img src="{{ p['logo_web'] if p else '' }}" alt="Logo Pengadilan Agama Ibukota Nusantara" class="img-fluid" style="max-height: 80px; width: auto;" loading="lazy">
+      </div>
+      <div class="col">
+        <h1 class="h4 mb-0 fw-bold text-uppercase">Pengadilan Agama Ibukota Nusantara</h1>
+        <p class="mb-0 small opacity-75 fst-italic">Mahkamah Agung Republik Indonesia - Wilayah Hukum IKN</p>
+      </div>
+    </div>
+  </div>
+</header>
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.landing_page') }}">
+            <i class="fas fa-home me-1"></i> Beranda
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Profil</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('public.sejarah') }}">Sejarah Pengadilan</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('public.visi_misi') }}">Visi & Misi</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ url_for('public.profil_pegawai') }}">
+              <i class="fas fa-users me-2"></i> DAFTAR PEGAWAI (LENGKAP)
+            </a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.jadwal_sidang') }}">
+            <i class="fas fa-calendar-alt me-1"></i> Jadwal Sidang
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.landing_page') }}#berita">Berita</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.landing_page') }}#laporan">Laporan Tamu</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.landing_page') }}#kontak">Hubungi Kami</a>
+        </li>
+      </ul>
+      <div class="d-flex">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-warning btn-anim text-dark fw-bold px-4 rounded-pill">
+          <i class="fas fa-lock me-2"></i> LOGIN PEGAWAI
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

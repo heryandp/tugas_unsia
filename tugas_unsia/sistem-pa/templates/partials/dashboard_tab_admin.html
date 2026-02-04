@@ -1,0 +1,187 @@
+<!-- PANEL ADMIN IT -->
+  <h3 class="mb-4 text-dark border-bottom pb-2">Panel Kontrol Super Admin IT</h3>
+  {% if role == 'admin_it' %}
+  <ul class="nav nav-tabs" id="adminTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="admin-user-tab" data-bs-toggle="tab" data-bs-target="#admin-user" type="button" role="tab">Pegawai</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="admin-setting-tab" data-bs-toggle="tab" data-bs-target="#admin-setting" type="button" role="tab">Pengaturan</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="admin-news-tab" data-bs-toggle="tab" data-bs-target="#admin-news" type="button" role="tab">Berita</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="admin-gallery-tab" data-bs-toggle="tab" data-bs-target="#admin-gallery" type="button" role="tab">Galeri</button>
+    </li>
+  </ul>
+  <div class="tab-content border border-top-0 p-3 bg-white" id="adminTabContent">
+    <div class="tab-pane fade show active" id="admin-user" role="tabpanel">
+      <div class="card shadow">
+        <div class="card-header bg-dark text-white"><i class="fas fa-user-plus me-2"></i> Tambah Pegawai Baru</div>
+        <div class="card-body">
+          <form action="/tambah_user" method="POST" enctype="multipart/form-data" hx-post="/tambah_user" hx-swap="none" hx-encoding="multipart/form-data" hx-on::after-request="this.reset()">
+            <div class="mb-2"><label>Username</label><input name="username" class="form-control" required minlength="3" maxlength="50"></div>
+            <div class="mb-2"><label>Password</label><input name="password" class="form-control" required minlength="4" maxlength="64"></div>
+            <div class="mb-2"><label>Nama Lengkap</label><input name="nama" class="form-control" required minlength="3" maxlength="80"></div>
+            <div class="mb-2"><label>NIP</label><input name="nip" class="form-control" required minlength="5" maxlength="18" pattern="\\d+" inputmode="numeric"></div>
+            <div class="mb-3 bg-danger bg-opacity-10 p-2 rounded">
+              <label class="fw-bold text-danger"><i class="fas fa-lock me-1"></i> PIN 6 Digit (WAJIB!)</label>
+              <input type="text" name="pin_6digit" class="form-control" maxlength="6" minlength="6" pattern="\\d{6}" inputmode="numeric" placeholder="Contoh: 123456" required>
+              <small class="text-muted">* Hanya angka 0-9, untuk verifikasi login</small>
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold text-success"><i class="fas fa-camera me-1"></i> Upload Pas Foto (Opsional)</label>
+              <input type="file" name="pas_foto" class="form-control form-control-sm" accept=".jpg,.png,.jpeg">
+              <small class="text-muted">Format: JPG, PNG (Max 2MB)</small>
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold text-primary"><i class="fas fa-file-pdf me-1"></i> Upload PDF SK PNS (Opsional)</label>
+              <input type="file" name="pdf_sk_pns" class="form-control form-control-sm" accept=".pdf">
+              <small class="text-muted">Format: PDF (Max 5MB)</small>
+            </div>
+            <div class="mb-3"><label>Jabatan</label>
+              <select name="role" class="form-select">
+                <option value="staff">Staff Pelayanan</option>
+                <option value="hakim">Hakim</option>
+                <option value="panitera">Panitera (Cetak Akta)</option>
+                <option value="sekretaris">Sekretaris</option>
+                <option value="kassubag">Kassubag</option>
+                <option value="ketua">Ketua Pengadilan</option>
+                <option value="wakil_ketua">Wakil Ketua</option>
+                <option value="admin_it">Admin IT</option>
+              </select>
+            </div>
+            <button class="btn btn-dark w-100 btn-anim">SIMPAN PEGAWAI</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="admin-setting" role="tabpanel">
+      <div class="card shadow border-success">
+        <div class="card-header bg-success text-white"><i class="fas fa-paint-brush me-2"></i> Pengaturan Tampilan & Keamanan</div>
+        <div class="card-body">
+          <form action="/cms_update" method="POST" enctype="multipart/form-data" hx-post="/cms_update" hx-swap="none" hx-encoding="multipart/form-data">
+            <div class="row mb-3">
+              <div class="col-6"><label class="small fw-bold">Ganti Logo Web:</label><input type="file" name="logo_web" class="form-control form-control-sm"></div>
+              <div class="col-6"><label class="small fw-bold">Foto Ketua:</label><input type="file" name="foto_ketua" class="form-control form-control-sm"></div>
+            </div>
+            <div class="mb-3 bg-success bg-opacity-10 p-3 rounded border border-success">
+              <label class="fw-bold text-success"><i class="fas fa-image me-2"></i> Logo Pengadilan Agama IKN (Untuk Header Surat):</label>
+              <input type="file" name="logo_pa_ikn" class="form-control form-control-sm">
+              <small class="text-muted d-block mt-1">* Logo ini akan muncul di pojok kiri atas saat download Word/PDF</small>
+              {% if p.get('logo_pa_ikn') %}
+              <small class="text-success d-block mt-1"><i class="fas fa-check-circle me-1"></i> Logo saat ini: <a href="{{p['logo_pa_ikn'] }}" target="_blank">Lihat</a></small>
+              {% endif %}
+            </div>
+            <div class="mb-3 bg-primary bg-opacity-10 p-3 rounded border border-primary">
+              <label class="fw-bold text-primary"><i class="fas fa-signature me-2"></i> Upload Barcode/Gambar Tanda Tangan Digital:</label>
+              <input type="file" name="barcode_ttd" class="form-control form-control-sm">
+              <small class="text-muted d-block mt-1">* Gambar ini akan muncul di bagian tanda tangan pada Akta Cerai</small>
+              {% if p.get('barcode_ttd') %}
+              <small class="text-primary d-block mt-1"><i class="fas fa-check-circle me-1"></i> Barcode TTD saat ini: <a href="{{ p['barcode_ttd'] }}" target="_blank">Lihat</a></small>
+              {% endif %}
+            </div>
+            <div class="mb-2"><label class="small fw-bold">Background Landing Page:</label><input type="file" name="bg_landing" class="form-control form-control-sm"></div>
+            <div class="mb-2"><label class="small fw-bold">Background Login:</label><input type="file" name="bg_login" class="form-control form-control-sm"></div>
+            <div class="mb-3"><label class="small fw-bold">Background Dashboard:</label><input type="file" name="bg_dashboard" class="form-control form-control-sm"></div>
+            <div class="mb-3"><label class="small fw-bold">Background Halaman Verifikasi PIN:</label><input type="file" name="bg_verify_pin" class="form-control form-control-sm"></div>
+            <div class="mb-2"><label class="small fw-bold">Kata Sambutan Ketua:</label><textarea name="sambutan_ketua" class="form-control" rows="3">{{p['sambutan_ketua'] }}</textarea></div>
+            <div class="row mb-2">
+              <div class="col-6"><label class="small fw-bold">No. Telepon:</label><input type="text" name="no_telp" class="form-control form-control-sm" value="{{ p['no_telp'] }}" minlength="8" maxlength="20"></div>
+              <div class="col-6"><label class="small fw-bold">Email Kantor:</label><input type="email" name="email_kantor" class="form-control form-control-sm" value="{{ p['email_kantor'] }}"></div>
+            </div>
+            <label class="small fw-bold text-success">Update 5 Foto Galeri Kegiatan:</label>
+            <div class="input-group input-group-sm mb-1"><span class="input-group-text">1</span><input type="file" name="kegiatan_1" class="form-control"></div>
+            <div class="input-group input-group-sm mb-1"><span class="input-group-text">2</span><input type="file" name="kegiatan_2" class="form-control"></div>
+            <div class="input-group input-group-sm mb-1"><span class="input-group-text">3</span><input type="file" name="kegiatan_3" class="form-control"></div>
+            <div class="input-group input-group-sm mb-1"><span class="input-group-text">4</span><input type="file" name="kegiatan_4" class="form-control"></div>
+            <div class="input-group input-group-sm mb-3"><span class="input-group-text">5</span><input type="file" name="kegiatan_5" class="form-control"></div>
+            <button class="btn btn-success w-100 btn-anim fw-bold">UPDATE SEMUA PENGATURAN</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="admin-news" role="tabpanel">
+      <div class="card shadow border-warning">
+        <div class="card-header bg-warning text-dark"><i class="fas fa-newspaper me-2"></i> Tambah Berita & Kegiatan Terbaru</div>
+        <div class="card-body">
+          <form action="/tambah_berita" method="POST" enctype="multipart/form-data" hx-post="/tambah_berita" hx-target="#berita-body" hx-swap="afterbegin" hx-encoding="multipart/form-data" hx-on::after-request="this.reset()">
+            <div class="mb-3">
+              <label class="fw-bold">Judul Berita</label>
+              <input type="text" name="judul" class="form-control" placeholder="Contoh: Rapat Koordinasi Tahunan" required minlength="5" maxlength="120">
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold">Isi Berita</label>
+              <textarea name="isi" class="form-control" rows="3" placeholder="Tulis isi berita..." required minlength="10" maxlength="2000"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold">Upload Foto Berita</label>
+              <input type="file" name="gambar" class="form-control" accept=".jpg,.png,.jpeg">
+            </div>
+            <button class="btn btn-warning w-100 btn-anim fw-bold text-dark">POSTING BERITA</button>
+          </form>
+          <hr class="my-4">
+          <h6 class="mb-3 fw-bold">Daftar Berita yang Sudah Diposting:</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+              <thead class="table-dark">
+                <tr>
+                  <th>Judul</th>
+                  <th>Isi</th>
+                  <th>Tanggal</th>
+                  <th width="10%">Hapus</th>
+                </tr>
+              </thead>
+              <tbody id="berita-body">
+                {% for b in berita %}
+                  {% include "partials/berita_row.html" %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="admin-gallery" role="tabpanel">
+      <div class="card shadow border-primary">
+        <div class="card-header bg-primary text-white"><i class="fas fa-images me-2"></i> Tambah Galeri Foto Kegiatan</div>
+        <div class="card-body">
+          <form action="/tambah_galeri" method="POST" enctype="multipart/form-data" hx-post="/tambah_galeri" hx-target="#galeri-body" hx-swap="afterbegin" hx-encoding="multipart/form-data" hx-on::after-request="this.reset()">
+            <div class="mb-3">
+              <label class="fw-bold">Judul / Keterangan Foto</label>
+              <input type="text" name="judul_foto" class="form-control" placeholder="Contoh: Rapat Pleno Hakim" required minlength="3" maxlength="120">
+            </div>
+            <div class="mb-3">
+              <label class="fw-bold">Upload Foto Kegiatan</label>
+              <input type="file" name="file_foto" class="form-control" accept=".jpg,.png,.jpeg" required>
+              <small class="text-muted">Format: JPG, PNG (Max 2MB)</small>
+            </div>
+            <button class="btn btn-primary w-100 btn-anim fw-bold">UPLOAD FOTO GALERI</button>
+          </form>
+          <hr class="my-4">
+          <h6 class="mb-3 fw-bold">Daftar Foto Galeri yang Sudah Diupload:</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+              <thead class="table-dark">
+                <tr>
+                  <th>Preview</th>
+                  <th>Judul Foto</th>
+                  <th>Tanggal</th>
+                  <th width="10%">Hapus</th>
+                </tr>
+              </thead>
+              <tbody id="galeri-body">
+                {% for g in galeri %}
+                  {% include "partials/galeri_row.html" %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-danger">AKSES DITOLAK. HANYA ADMIN IT.</div>
+  {% endif %}
