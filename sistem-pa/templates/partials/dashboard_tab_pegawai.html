@@ -1,38 +1,60 @@
 <!-- DATA PEGAWAI (DENGAN TOMBOL EDIT) -->
-  <div class="d-flex justify-content-between">
-    <h3>Daftar Pegawai Aktif</h3>
-    <a href="/export/pegawai" class="btn btn-success btn-sm btn-anim"><i class="fas fa-file-excel"></i> Export Excel</a>
-  </div>
-  <div class="card p-3 mt-3">
-    <ul class="list-group list-group-flush">
-      {% for u in pegawai %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-          {% if u['pas_foto'] %}
-          <img src="/uploads/{{ u['pas_foto'] }}" width="50" height="50" class="rounded-circle me-3 border border-success img-cover-50" loading="lazy">
-          {% else %}
-          <img src="https://i.pravatar.cc/150?u={{ u['username']|urlencode }}" width="50" height="50" class="rounded-circle me-3 border img-cover-50" loading="lazy">
-          {% endif %}
-          <div>
-            <span class="fw-bold text-dark">{{ u['nama_lengkap'] }}</span> <br>
-            <small class="text-muted">NIP: {{ u['nip'] }} | User: {{ u['username'] }} | PIN: {{ u['pin_6digit'] }}</small>
-            {% if u['pdf_sk_pns'] %}
-            <br><small class="text-success"><i class="fas fa-file-pdf me-1"></i> SK PNS: <a href="/uploads/{{ u['pdf_sk_pns'] }}" target="_blank">Lihat PDF</a></small>
-            {% endif %}
-          </div>
-        </div>
-        <div class="d-flex align-items-center">
-          <span class="badge bg-secondary me-3">{{ u['role']|upper }}</span>
-          {% if role == 'admin_it' %}
-          <a href="/edit_pegawai/{{ u['id'] }}" class="btn-edit" title="Edit Data Pegawai">
-            <i class="fas fa-edit"></i>
-          </a>
-          <a href="/hapus_data/pegawai/{{ u['id'] }}" class="btn-delete" title="Hapus Data" hx-get="/hapus_data/pegawai/{{ u['id'] }}" hx-target="closest li" hx-swap="outerHTML" hx-confirm="Hapus pegawai ini?">
-            <i class="fas fa-trash-alt"></i>
-          </a>
+<div class="d-flex justify-content-between sticky-dashboard-header">
+  <h3>Daftar Pegawai Aktif</h3>
+  <a href="/export/pegawai" class="btn btn-success btn-sm btn-anim"><i class="fas fa-file-excel"></i> Export Excel</a>
+</div>
+<div class="card p-3 mt-3">
+  <ul class="list-group list-group-flush">
+    {% for u in pegawai %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        {% if u['pas_foto'] %}
+        <img src="/uploads/{{ u['pas_foto'] }}" width="50" height="50"
+          class="rounded-circle me-3 border border-success img-cover-50" loading="lazy">
+        {% else %}
+        <img src="https://i.pravatar.cc/150?u={{ u['username']|urlencode }}" width="50" height="50"
+          class="rounded-circle me-3 border img-cover-50" loading="lazy">
+        {% endif %}
+        <div>
+          <span class="fw-bold text-dark">{{ u['nama_lengkap'] }}</span> <br>
+          <small class="text-muted">NIP: {{ u['nip'] }} | User: {{ u['username'] }} | PIN: {{ u['pin_6digit'] }}</small>
+          {% if u['pdf_sk_pns'] %}
+          <br><small class="text-success"><i class="fas fa-file-pdf me-1"></i> SK PNS: <a
+              href="/uploads/{{ u['pdf_sk_pns'] }}" target="_blank">Lihat PDF</a></small>
           {% endif %}
         </div>
-      </li>
-      {% endfor %}
-    </ul>
+      </div>
+      <div class="d-flex align-items-center">
+        <span class="badge bg-secondary me-3">{{ u['role']|upper }}</span>
+        {% if role == 'admin_it' %}
+        <a href="#" class="btn-edit" title="Edit Data Pegawai" hx-get="/edit_pegawai/{{ u['id'] }}"
+          hx-target="#editModal .modal-body" data-bs-toggle="modal" data-bs-target="#editModal">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a href="/hapus_data/pegawai/{{ u['id'] }}" class="btn-delete" title="Hapus Data"
+          hx-get="/hapus_data/pegawai/{{ u['id'] }}" hx-target="closest li" hx-swap="outerHTML"
+          hx-confirm="Hapus pegawai ini?">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- Modal Edit Pegawai -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Data Pegawai</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form loaded via HTMX -->
+        <div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+      </div>
+    </div>
   </div>
+</div>

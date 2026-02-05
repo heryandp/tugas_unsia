@@ -3,7 +3,6 @@
 {% block body_class %}page-login d-flex align-items-center justify-content-center{% endblock %}
 {% block body_style %}--page-bg: url("{{ bg }}");{% endblock %}
 {% block content %}
-<div data-body-class="d-flex align-items-center justify-content-center">
 <div class="login-card">
   <img src="{{ logo }}" class="logo-img" alt="Logo Instansi" loading="lazy">
   <div class="app-title">PENGADILAN AGAMA<br>IBUKOTA NUSANTARA</div>
@@ -13,12 +12,15 @@
     <i class="fas fa-exclamation-circle me-2"></i> {{ error }}
   </div>
   {% endif %}
-  <form method="POST">
+  <form method="POST" hx-boost="false">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="mb-3 text-start">
-      <input type="text" name="username" class="form-control" placeholder="Username / NIP" required minlength="3" maxlength="50" autofocus>
+      <input type="text" name="username" class="form-control" placeholder="Username / NIP" required minlength="3"
+        maxlength="50" autofocus>
     </div>
     <div class="mb-3 text-start password-wrapper">
-      <input type="password" name="password" class="form-control" id="login-password" placeholder="Password" required minlength="4" maxlength="64">
+      <input type="password" name="password" class="form-control" id="login-password" placeholder="Password" required
+        minlength="4" maxlength="64">
       <button type="button" class="password-toggle" id="password-toggle" aria-label="Tampilkan password">
         <i class="fas fa-eye" id="toggle-icon"></i>
       </button>
@@ -33,9 +35,10 @@
           <i class="fas fa-rotate"></i>
         </a>
       </div>
-      <input type="text" name="captcha" class="form-control" placeholder="Ketik jawaban di sini..." required minlength="1" maxlength="10" autocomplete="off">
+      <input type="text" name="captcha" class="form-control" placeholder="Ketik jawaban di sini..." required
+        minlength="1" maxlength="10" autocomplete="off">
     </div>
-    <button type="submit" class="btn-login shadow">
+    <button type="submit" class="btn-login shadow btn-anim">
       <i class="fas fa-sign-in-alt me-2"></i> MASUK SISTEM
     </button>
   </form>
@@ -44,7 +47,6 @@
   </a>
 </div>
 <div class="copyright">
-</div>
 </div>
 
 {% block scripts %}

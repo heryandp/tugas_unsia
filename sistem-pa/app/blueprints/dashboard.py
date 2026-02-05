@@ -3,6 +3,7 @@ import os
 import random
 from datetime import datetime
 
+import uuid
 import json
 
 from flask import Blueprint, current_app, flash, make_response, redirect, render_template, request, session, url_for
@@ -26,12 +27,12 @@ def _guard_dashboard():
 def _dashboard_context(perkara=None):
     conn = get_db()
     if perkara is None:
-        perkara = conn.execute("SELECT * FROM perkara").fetchall()
-    pegawai = conn.execute("SELECT * FROM users").fetchall()
-    chat = conn.execute("SELECT * FROM diskusi ORDER BY id DESC LIMIT 50").fetchall()
-    laporan = conn.execute("SELECT * FROM laporan_tamu ORDER BY id DESC").fetchall()
-    berita = conn.execute("SELECT * FROM berita ORDER BY id DESC").fetchall()
-    galeri = conn.execute("SELECT * FROM galeri ORDER BY id DESC").fetchall()
+        perkara = conn.execute("SELECT * FROM perkara WHERE is_deleted=0").fetchall()
+    pegawai = conn.execute("SELECT * FROM users WHERE is_deleted=0").fetchall()
+    chat = conn.execute("SELECT * FROM diskusi WHERE is_deleted=0 ORDER BY id DESC LIMIT 50").fetchall()
+    laporan = conn.execute("SELECT * FROM laporan_tamu WHERE is_deleted=0 ORDER BY id DESC").fetchall()
+    berita = conn.execute("SELECT * FROM berita WHERE is_deleted=0 ORDER BY id DESC").fetchall()
+    galeri = conn.execute("SELECT * FROM galeri WHERE is_deleted=0 ORDER BY id DESC").fetchall()
     rows = conn.execute("SELECT * FROM pengaturan").fetchall()
     p = {row["kunci"]: row["nilai"] for row in rows}
     return {
@@ -104,7 +105,7 @@ def input_perkara():
     if guard:
         return guard
     conn = get_db()
-    perkara_latest = conn.execute("SELECT * FROM perkara ORDER BY id DESC LIMIT 5").fetchall()
+    perkara_latest = conn.execute("SELECT * FROM perkara WHERE is_deleted=0 ORDER BY id DESC LIMIT 5").fetchall()
     ctx = _dashboard_context(perkara=perkara_latest)
     year_now = datetime.now().year
     ctx["no_perkara_auto"] = _next_no_perkara(year_now)
@@ -120,12 +121,12 @@ def data_akta():
     page = max(int(request.args.get("page", 1)), 1)
     per_page = max(int(request.args.get("per_page", 10)), 1)
     conn = get_db()
-    total = conn.execute("SELECT COUNT(*) FROM perkara").fetchone()[0]
+    total = conn.execute("SELECT COUNT(*) FROM perkara WHERE is_deleted=0").fetchone()[0]
     pages = max(math.ceil(total / per_page), 1) if total else 1
     page = min(page, pages)
     offset = (page - 1) * per_page
     perkara_page = conn.execute(
-        "SELECT * FROM perkara ORDER BY id DESC LIMIT ? OFFSET ?",
+        "SELECT * FROM perkara WHERE is_deleted=0 ORDER BY id DESC LIMIT ? OFFSET ?",
         (per_page, offset),
     ).fetchall()
     ctx = _dashboard_context(perkara=perkara_page)
@@ -247,20 +248,27 @@ def tambah_perkara():
     except Exception as e:
         current_app.logger.error(f"Error upload file: {e}")
     conn = get_db()
+    new_id = str(uuid.uuid4())
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    creator = session.get("nama", "Staff")
     cur = conn.execute(
         """INSERT INTO perkara
-        (no_perkara, nama_suami, nama_istri, keluhan, tanggal_daftar, nama_staff,
-        file_suami, file_istri, status, biaya_daftar, hasil_mediasi, tanggal_sidang)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (no, suami, istri, keluhan, tgl, staff, ns, ni, "Terdaftar (Menunggu Mediasi)", biaya, "Belum Dimediasi", tanggal_sidang),
+        (id, no_perkara, nama_suami, nama_istri, keluhan, tanggal_daftar, nama_staff,
+        file_suami, file_istri, status, biaya_daftar, hasil_mediasi, tanggal_sidang,
+        is_deleted, deleted_at, created_at, created_by, updated_at, updated_by)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, NULL, ?, ?, NULL, NULL)""",
+        (new_id, no, suami, istri, keluhan, tgl, staff, ns, ni, "Terdaftar (Menunggu Mediasi)", biaya, "Belum Dimediasi", tanggal_sidang, now, creator),
     )
     conn.commit()
     flash("Perkara berhasil ditambahkan.", "success")
     if request.headers.get("HX-Request"):
-        r = conn.execute("SELECT * FROM perkara WHERE id=?", (cur.lastrowid,)).fetchone()
+        r = conn.execute("SELECT * FROM perkara WHERE id=?", (new_id,)).fetchone()
         resp = make_response(render_template("partials/perkara_row.html", r=r, role=session["role"]))
         resp.headers["HX-Trigger"] = json.dumps(
-            {"toast": {"level": "success", "message": "Perkara berhasil ditambahkan."}}
+            {
+                "toast": {"level": "success", "message": "Perkara berhasil ditambahkan."},
+                "closeModal": {"value": "#inputPerkaraModal"}
+            }
         )
         return resp
     return _redirect_back("dashboard.input_perkara")
@@ -270,7 +278,7 @@ def tambah_perkara():
 def update_hakim():
     if session.get("role") not in ["hakim", "admin_it", "ketua", "wakil_ketua"]:
         return "Akses Ditolak"
-    id_p = sanitize_text(request.form.get("id_perkara", ""), 20)
+    id_p = sanitize_text(request.form.get("id_perkara", ""), 36)
     hasil = sanitize_text(request.form.get("hasil_mediasi", ""), 50)
     detail = sanitize_text(request.form.get("detail_mediasi", ""), 500)
     if not id_p or not hasil:
@@ -284,9 +292,11 @@ def update_hakim():
     if hasil == "Gagal":
         status_baru = "Putusan Cerai Sah"
     conn = get_db()
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    updater = session.get("nama", "Hakim")
     conn.execute(
-        "UPDATE perkara SET hasil_mediasi=?, detail_mediasi=?, nama_mediator=?, status=? WHERE id=?",
-        (hasil, detail, mediator, status_baru, id_p),
+        "UPDATE perkara SET hasil_mediasi=?, detail_mediasi=?, nama_mediator=?, status=?, updated_at=?, updated_by=? WHERE id=?",
+        (hasil, detail, mediator, status_baru, now, updater, id_p),
     )
     conn.commit()
     if request.headers.get("HX-Request"):
@@ -304,7 +314,7 @@ def update_hakim():
 def update_panitera():
     if session.get("role") not in ["panitera", "admin_it"]:
         return "Akses Ditolak"
-    id_p = sanitize_text(request.form.get("id_perkara", ""), 20)
+    id_p = sanitize_text(request.form.get("id_perkara", ""), 36)
     if not id_p:
         msg = "ID perkara tidak valid."
         if request.headers.get("HX-Request"):
@@ -313,7 +323,9 @@ def update_panitera():
         return _redirect_back("dashboard.data_akta")
     no_akta = f"AC-{random.randint(1000,9999)}/PA-IKN/{datetime.now().year}"
     conn = get_db()
-    conn.execute("UPDATE perkara SET no_akta_cerai=? WHERE id=?", (no_akta, id_p))
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    updater = session.get("nama", "Panitera")
+    conn.execute("UPDATE perkara SET no_akta_cerai=?, updated_at=?, updated_by=? WHERE id=?", (no_akta, now, updater, id_p))
     conn.commit()
     if request.headers.get("HX-Request"):
         r = conn.execute("SELECT * FROM perkara WHERE id=?", (id_p,)).fetchone()
@@ -343,9 +355,11 @@ def kirim_chat():
         return _redirect_back("dashboard.diskusi")
     tgl = datetime.now().strftime("%d-%m-%Y %H:%M")
     conn = get_db()
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    creator = session.get("nama", "Unknown")
     conn.execute(
-        "INSERT INTO diskusi (pengirim, role_pengirim, pesan, tanggal) VALUES (?, ?, ?, ?)",
-        (session["nama"], session["role"], pesan, tgl),
+        "INSERT INTO diskusi (id, pengirim, role_pengirim, pesan, tanggal, is_deleted, deleted_at, created_at, created_by, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, 0, NULL, ?, ?, NULL, NULL)",
+        (str(uuid.uuid4()), session["nama"], session["role"], pesan, tgl, now, creator),
     )
     conn.commit()
     flash("Pesan terkirim.", "success")
@@ -362,7 +376,7 @@ def kirim_chat():
 def balas_saran():
     if session.get("role") not in ["kassubag", "admin_it", "sekretaris"]:
         return "Akses Ditolak"
-    id_laporan = sanitize_text(request.form.get("id_laporan", ""), 20)
+    id_laporan = sanitize_text(request.form.get("id_laporan", ""), 36)
     balasan = sanitize_text(request.form.get("balasan", ""), 500)
     if not id_laporan or not balasan:
         msg = "Balasan wajib diisi."
@@ -377,7 +391,9 @@ def balas_saran():
         flash(msg, "error")
         return _redirect_back("dashboard.laporan")
     conn = get_db()
-    conn.execute("UPDATE laporan_tamu SET balasan=?, status='Dibalas' WHERE id=?", (balasan, id_laporan))
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    updater = session.get("nama", "Kassubag")
+    conn.execute("UPDATE laporan_tamu SET balasan=?, status='Dibalas', updated_at=?, updated_by=? WHERE id=?", (balasan, now, updater, id_laporan))
     conn.commit()
     flash("Balasan berhasil dikirim.", "success")
     if request.headers.get("HX-Request"):
@@ -405,7 +421,15 @@ def hapus_data(tipe, id):
     }
     if tipe not in allowed:
         return "Tipe tidak valid", 400
-    conn.execute(f"DELETE FROM {allowed[tipe]} WHERE id=?", (id,))
+    if tipe == "pegawai" and id == session.get("user_id"):
+        return _hx_error("Tidak dapat menghapus akun sendiri!") if request.headers.get("HX-Request") else "Tidak dapat menghapus akun sendiri", 403
+    table_name = allowed[tipe]
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    deleted_by = session.get("nama", "Unknown")
+    conn.execute(
+        f"UPDATE {table_name} SET is_deleted=1, deleted_at=?, updated_by=? WHERE id=?", 
+        (now, deleted_by, id)
+    )
     conn.commit()
     flash("Data berhasil dihapus.", "success")
     if request.headers.get("HX-Request"):
@@ -427,7 +451,10 @@ def edit_pegawai(id):
         role = sanitize_text(request.form.get("role", ""), 20)
         nip = sanitize_text(request.form.get("nip", ""), 20)
         pin = sanitize_text(request.form.get("pin_6digit", ""), 6)
-        if not nama or not role or not nip or not pin:
+        password = sanitize_text(request.form.get("password", ""), 64)
+        username = sanitize_text(request.form.get("username", ""), 50)
+
+        if not nama or not role or not nip or not pin or not username:
             msg = "Mohon lengkapi semua field."
             if request.headers.get("HX-Request"):
                 return _hx_error(msg)
@@ -451,10 +478,19 @@ def edit_pegawai(id):
                 return _hx_error(msg)
             flash(msg, "error")
             return redirect(url_for("dashboard.data_pegawai"))
-        conn.execute(
-            "UPDATE users SET nama_lengkap=?, role=?, nip=?, pin_6digit=? WHERE id=?",
-            (nama, role, nip, pin, id),
-        )
+        
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        updater = session.get("nama", "Admin")
+        if password:
+             conn.execute(
+                "UPDATE users SET username=?, nama_lengkap=?, role=?, nip=?, pin_6digit=?, password=?, updated_at=?, updated_by=? WHERE id=?",
+                (username, nama, role, nip, pin, generate_password_hash(password), now, updater, id),
+            )
+        else:
+            conn.execute(
+                "UPDATE users SET username=?, nama_lengkap=?, role=?, nip=?, pin_6digit=?, updated_at=?, updated_by=? WHERE id=?",
+                (username, nama, role, nip, pin, now, updater, id),
+            )
         foto = request.files.get("pas_foto")
         if foto and allowed_file(foto.filename):
             ok, msg = validate_upload(foto, max_upload_bytes(foto))
@@ -476,9 +512,14 @@ def edit_pegawai(id):
         if request.headers.get("HX-Request"):
             resp = make_response("", 204)
             resp.headers["HX-Trigger"] = json.dumps(
-                {"toast": {"level": "success", "message": "Data pegawai berhasil diperbarui."}}
+                {
+                    "toast": {"level": "success", "message": "Data pegawai berhasil diperbarui."},
+                    "closeModal": {"value": "#editModal"}
+                }
             )
             return resp
         return redirect(url_for("dashboard.data_pegawai"))
     pegawai = conn.execute("SELECT * FROM users WHERE id=?", (id,)).fetchone()
+    if request.headers.get("HX-Request"):
+        return render_template("partials/form_edit_pegawai.html", pegawai=pegawai)
     return render_template("edit_pegawai.html", pegawai=pegawai)

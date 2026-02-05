@@ -7,24 +7,30 @@
   <td>{{ r['hasil_mediasi'] }}</td>
   <td>{{ r['tanggal_sidang'] }}</td>
   <td class="text-center">
-    <a href="/download_pdf_data/{{ r['id'] }}" class="btn btn-sm btn-outline-danger" hx-boost="false"><i class="fas fa-file-pdf"></i> PDF</a>
-    <a href="/download_doc_data/{{ r['id'] }}" class="btn btn-sm btn-outline-primary" hx-boost="false"><i class="fas fa-file-word"></i> DOC</a>
+    <a href="/download_pdf_data/{{ r['id'] }}" class="btn btn-sm btn-outline-danger" hx-boost="false"><i
+        class="fas fa-file-pdf"></i> PDF</a>
+    <a href="/download_doc_data/{{ r['id'] }}" class="btn btn-sm btn-outline-primary" hx-boost="false"><i
+        class="fas fa-file-word"></i> DOC</a>
     {% if r['no_akta_cerai'] %}
-    <a href="/cetak_akta/suami/{{ r['id'] }}" class="btn btn-sm btn-warning btn-anim w-100 mt-1" hx-boost="false">Akta Suami</a>
-    <a href="/cetak_akta/istri/{{ r['id'] }}" class="btn btn-sm btn-warning btn-anim w-100 mt-1" hx-boost="false">Akta Istri</a>
+    <a href="/cetak_akta/suami/{{ r['id'] }}" class="btn btn-sm btn-warning btn-anim w-100 mt-1" hx-boost="false">Akta
+      Suami</a>
+    <a href="/cetak_akta/istri/{{ r['id'] }}" class="btn btn-sm btn-warning btn-anim w-100 mt-1" hx-boost="false">Akta
+      Istri</a>
     {% endif %}
     {% if role in ['panitera', 'admin_it'] %}
     {% if not r['no_akta_cerai'] %}
-    <form action="/update_panitera" method="POST" class="mt-1" hx-post="/update_panitera" hx-target="closest tr" hx-swap="outerHTML">
+    <form action="/update_panitera" method="POST" class="mt-1" hx-post="/update_panitera" hx-target="closest tr"
+      hx-swap="outerHTML">
       <input type="hidden" name="id_perkara" value="{{ r['id'] }}">
       <button class="btn btn-sm btn-warning btn-anim w-100 mt-1" type="submit">Terbitkan Akta</button>
     </form>
     {% endif %}
     {% endif %}
     {% if role == 'admin_it' %}
-    <a href="/hapus_data/perkara/{{ r['id'] }}" class="btn-delete float-end mt-2" title="Hapus Data" hx-get="/hapus_data/perkara/{{ r['id'] }}" hx-target="closest tr" hx-swap="outerHTML" hx-confirm="Hapus data ini?">
+    <button class="btn btn-link text-danger p-0 float-end mt-2" title="Hapus Data"
+      onclick="setDeleteUrl('/hapus_data/perkara/{{ r['id'] }}', 'Perkara No: {{ r['no_perkara'] }}')">
       <i class="fas fa-trash-alt"></i>
-    </a>
+    </button>
     {% endif %}
   </td>
 </tr>

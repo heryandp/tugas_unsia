@@ -105,13 +105,33 @@ def download_doc_data(id):
     nomor_run.font.size = Pt(12)
     nomor_run.bold = True
 
-    doc.add_paragraph(f"Tanggal Pendaftaran: {data['tanggal_daftar']}")
-    doc.add_paragraph(f"Biaya Pendaftaran: Rp {data['biaya_daftar']}")
+    # Registration Details Table
+    table_reg = doc.add_table(rows=0, cols=2)
+    table_reg.style = 'Table Grid' # Or None for invisible borders, usually 'Normal' or None is better for this doc
+    # Using 'None' (default) style for no borders usually, but let's try to just add rows
+    # docx default table style usually has borders? No, usually grid has borders.
+    # Let's manually set width if possible or just rely on autofit.
+    
+    def add_row(table, label, value):
+        row = table.add_row()
+        c1 = row.cells[0]
+        c1.text = label
+        c1.paragraphs[0].runs[0].bold = True
+        c1.width = Inches(2.5)
+        c2 = row.cells[1]
+        c2.text = value
+        
+    add_row(table_reg, "Tanggal Pendaftaran:", f"{data['tanggal_daftar']}")
+    # add_row(table_reg, "Biaya Pendaftaran:", f"Rp {data['biaya_daftar']}")
+    # Petugas
+    add_row(table_reg, "Petugas Pendaftar:", f"{data['nama_staff']}")
+    
     doc.add_paragraph()
 
     doc.add_heading("DATA PIHAK BERPERKARA:", level=2)
-    doc.add_paragraph(f"Nama Suami (Pemohon): {data['nama_suami']}")
-    doc.add_paragraph(f"Nama Istri (Termohon): {data['nama_istri']}")
+    table_pihak = doc.add_table(rows=0, cols=2)
+    add_row(table_pihak, "Nama Suami (Pemohon):", f"{data['nama_suami']}")
+    add_row(table_pihak, "Nama Istri (Termohon):", f"{data['nama_istri']}")
     doc.add_paragraph()
 
     doc.add_heading("POKOK PERKARA:", level=2)
@@ -119,14 +139,15 @@ def download_doc_data(id):
     doc.add_paragraph()
 
     doc.add_heading("STATUS PERKARA:", level=2)
-    doc.add_paragraph(f"Status Terakhir: {data['status']}")
-    doc.add_paragraph(f"Hasil Mediasi: {data['hasil_mediasi']}")
+    table_status = doc.add_table(rows=0, cols=2)
+    add_row(table_status, "Status Terakhir:", f"{data['status']}")
+    add_row(table_status, "Hasil Mediasi:", f"{data['hasil_mediasi']}")
     if data["detail_mediasi"]:
-        doc.add_paragraph(f"Catatan Mediasi: {data['detail_mediasi']}")
+         add_row(table_status, "Catatan Mediasi:", f"{data['detail_mediasi']}")
     if data["nama_mediator"]:
-        doc.add_paragraph(f"Mediator: {data['nama_mediator']}")
+         add_row(table_status, "Mediator:", f"{data['nama_mediator']}")
     if data["tanggal_sidang"]:
-        doc.add_paragraph(f"Jadwal Sidang: {data['tanggal_sidang']}")
+         add_row(table_status, "Jadwal Sidang:", f"{data['tanggal_sidang']}")
     doc.add_paragraph()
 
     if data["no_akta_cerai"]:
@@ -145,12 +166,6 @@ def download_doc_data(id):
     footer_run2.font.size = Pt(8)
     footer_run2.font.color.rgb = RGBColor(128, 128, 128)
 
-    copyright_para = doc.add_paragraph()
-    copyright_para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    copyright_run = copyright_para.add_run("\n© Hak Cipta by Andra Prawira Kusumah - Tim Kelompok 2")
-    copyright_run.font.size = Pt(7)
-    copyright_run.font.color.rgb = RGBColor(100, 100, 100)
-    copyright_run.italic = True
 
     buffer = io.BytesIO()
     doc.save(buffer)
@@ -261,7 +276,6 @@ def download_pdf_data(id):
     pdf.ln(5)
     pdf.set_font("Times", "I", 7)
     pdf.set_text_color(120, 120, 120)
-    pdf.cell(0, 5, "Hak Cipta by Andra Prawira Kusumah - Tim Kelompok 2", 0, 1, "R")
     buffer = io.BytesIO()
     pdf_output = pdf.output(dest="S")
     if isinstance(pdf_output, (bytes, bytearray)):
@@ -330,17 +344,29 @@ def cetak_akta(tipe, id):
     )
     pdf.multi_cell(0, 8, text_closing, 0, "J")
     pdf.ln(30)
+    # ... (inside cetak_akta) ...
+    
+    # Fetch Panitera Name
+    panitera_user = conn.execute("SELECT nama_lengkap FROM users WHERE role='panitera'").fetchone()
+    nama_panitera = panitera_user["nama_lengkap"] if panitera_user else "............................................."
+
     pdf.set_x(120)
     pdf.cell(0, 6, f"IKN, {datetime.now().strftime('%d %B %Y')}", 0, 1, "L")
     pdf.set_x(120)
     pdf.cell(0, 6, "Panitera,", 0, 1, "L")
-    pdf.ln(5)
+    pdf.ln(25) # Space for signature
+    pdf.set_x(120)
+    pdf.set_font("Times", "B", 12)
+    pdf.cell(0, 6, nama_panitera, 0, 1, "L")
+    pdf.set_font("Times", "", 12) # Reset font
+    
+    # Check for barcode/digital signature BEFORE name
     if barcode_res and barcode_res["nilai"] and barcode_res["nilai"].startswith("/uploads/"):
         barcode_path = barcode_res["nilai"].replace("/uploads/", "")
         barcode_full_path = os.path.join(current_app.config["UPLOAD_FOLDER"], barcode_path)
         if os.path.exists(barcode_full_path):
-            pdf.image(barcode_full_path, 120, pdf.get_y(), 40)
-            pdf.ln(25)
+            current_y = pdf.get_y()
+            pdf.image(barcode_full_path, 120, current_y - 20, 30) # Overlay slightly above
         else:
             pdf.set_x(120)
             pdf.set_font("Courier", "B", 8)
@@ -363,7 +389,6 @@ def cetak_akta(tipe, id):
     pdf.set_y(280)
     pdf.set_font("Times", "I", 7)
     pdf.set_text_color(120, 120, 120)
-    pdf.cell(0, 5, "Hak Cipta by Andra Prawira Kusumah - Tim Kelompok 2", 0, 0, "R")
     buffer = io.BytesIO()
     pdf_output = pdf.output(dest="S")
     if isinstance(pdf_output, (bytes, bytearray)):

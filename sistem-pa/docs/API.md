@@ -57,6 +57,19 @@ Returns:
 ## Diskusi Internal
 `GET /diskusi`
 
-## Swagger UI
-Open Swagger UI at:
-- `/docs/swagger-ui`
+## Data Integrity & Concepts
+- **Soft Delete**: Deleting resources (Perkara, Users, etc.) does not permanently remove them from the database. Instead, the `is_deleted` flag is set to `1`.
+- **UUIDs**: All resource IDs are UUID strings, not integers.
+
+## API Documentation (Swagger)
+The system provides two interactive API documentation interfaces:
+
+### 1. Core Application API
+Interact with the main application endpoints (Public, Dashboard, Admin).
+- **UI**: `/docs` (Recommended)
+- **JSON Spec**: `/spec`
+
+### 2. Dedicated Rest-API Blueprint
+For the specific `api` blueprint endpoints.
+- **UI**: `/docs/swagger-ui`
+- **JSON Spec**: `/docs/openapi.json`

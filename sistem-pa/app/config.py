@@ -1,9 +1,14 @@
 import os
 import sys
+from dotenv import load_dotenv
+
+# Load .env file if exists
+load_dotenv()
 
 
 class Config:
-    SECRET_KEY = "rahasia_super_admin_ikn_2025_mantap"
+    # Secret key - MUST be set in production via .env
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
 
     # Resolve base dir for .exe and script
     if getattr(sys, "frozen", False):
@@ -11,8 +16,9 @@ class Config:
     else:
         BASE_DIR = os.path.abspath(".")
 
-    DATABASE = os.path.join(BASE_DIR, "perkara.db")
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+    # Database and uploads - can be overridden via .env
+    DATABASE = os.getenv("DATABASE_PATH", os.path.join(BASE_DIR, "perkara.db"))
+    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", os.path.join(BASE_DIR, "uploads"))
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
 
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "pdf", "ico"}
@@ -26,7 +32,7 @@ class Config:
     OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5"
 
     # Security
-    SHOW_TRACEBACK = False
+    SHOW_TRACEBACK = os.getenv("SHOW_TRACEBACK", "false").lower() == "true"
     CSP_DEFAULT_SRC = "'self'"
     CSP_IMG_SRC = "'self' data: https:"
     CSP_STYLE_SRC = "'self' https: 'unsafe-inline'"

@@ -1,23 +1,65 @@
 <!-- DISKUSI INTERNAL -->
-  <h3 class="mb-3 text-info">Diskusi Internal Pegawai</h3>
-  <div hx-ext="ws" ws-connect="/chatroom">
-    <div class="chat-box mb-3 shadow-inner" id="chat-box">
-      {% for c in chat %}
-      <div class="chat-msg {{ c['role_pengirim'] }}">
-        <div class="chat-info d-flex justify-content-between">
-          <strong>{{ c['pengirim'] }} <span class="badge bg-secondary">{{ c['role_pengirim'] }}</span></strong>
-          <span>{{ c['tanggal'] }}</span>
-        </div>
-        <p class="mb-0">{{ c['pesan'] }}</p>
+<h3 class="sticky-dashboard-header text-info">Diskusi Internal Pegawai</h3>
+<div id="chat-container" class="d-flex flex-column" style="height: calc(100vh - 130px);" hx-ext="ws"
+  ws-connect="/chatroom">
+  <div class="chat-box mb-3 shadow-inner flex-grow-1 overflow-auto p-3 border rounded bg-light" id="chat-box"
+    style="scroll-behavior: smooth;">
+    {% for c in chat %}
+    <div class="chat-msg {{ c['role_pengirim'] }} mb-2 p-2 rounded shadow-sm bg-white border">
+      <div class="chat-info d-flex justify-content-between small text-muted border-bottom pb-1 mb-1">
+        <strong>{{ c['pengirim'] }} <span class="badge bg-secondary">{{ c['role_pengirim'] }}</span></strong>
+        <span>{{ c['tanggal'] }}</span>
       </div>
-      {% else %}
-      <p class="text-center text-muted mt-5">Belum ada diskusi.</p>
-      {% endfor %}
+      <p class="mb-0">{{ c['pesan'] }}</p>
     </div>
-    <form id="chat-form" class="d-flex gap-2" ws-send>
-      <input type="text" name="chat_message" class="form-control" placeholder="Tulis pesan diskusi di sini..." required minlength="1" maxlength="500">
-      <button class="btn btn-info text-white btn-anim px-4" type="submit">
-        <i class="fas fa-paper-plane"></i> KIRIM
-      </button>
-    </form>
+    {% else %}
+    <p class="text-center text-muted mt-5">Belum ada diskusi.</p>
+    {% endfor %}
   </div>
+  <form id="chat-form" class="d-flex gap-2 p-2 bg-white border-top shadow-sm" ws-send>
+    <input type="text" name="chat_message" class="form-control" placeholder="Tulis pesan diskusi di sini..." required
+      minlength="1" maxlength="500" autocomplete="off">
+    <button class="btn btn-info text-white btn-anim px-4" type="submit">
+      <i class="fas fa-paper-plane"></i> KIRIM
+    </button>
+  </form>
+</div>
+<style>
+  /* Styling tambahan untuk scrollbar */
+  #chat-box::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #chat-box::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  #chat-box::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  #chat-box::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .chat-msg.admin_it {
+    border-left: 4px solid #0dcaf0 !important;
+  }
+
+  .chat-msg.ketua {
+    border-left: 4px solid #198754 !important;
+  }
+
+  .chat-msg.staff {
+    border-left: 4px solid #ffc107 !important;
+  }
+</style>
+<script>
+  // Auto scroll to bottom on load
+  document.addEventListener("DOMContentLoaded", function () {
+    var chatBox = document.getElementById("chat-box");
+    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+  });
+  // Auto scroll handling for HTMX/WS updates would ideally go in app.js listener
+</script>

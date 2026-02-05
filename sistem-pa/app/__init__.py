@@ -7,6 +7,8 @@ from flask_sock import Sock
 from flask import Flask
 from flask_smorest import Api
 
+from flask_wtf.csrf import CSRFProtect
+
 from .config import Config
 from .db import init_app as init_db_app, init_db
 from .errors import register_errors
@@ -36,6 +38,7 @@ def _ensure_partitioned_cookie_support():
 
 
 sock = Sock()
+csrf = CSRFProtect()
 
 
 def create_app():
@@ -59,6 +62,8 @@ def create_app():
         os.makedirs(upload_folder, exist_ok=True)
 
     init_db_app(app)
+    csrf.init_app(app)  # Initialize CSRF protection
+
     with app.app_context():
         init_db()
 

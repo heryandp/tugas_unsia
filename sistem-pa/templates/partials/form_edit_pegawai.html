@@ -1,0 +1,66 @@
+<form action="/edit_pegawai/{{ pegawai['id'] }}" method="POST" enctype="multipart/form-data"
+    hx-post="/edit_pegawai/{{ pegawai['id'] }}" hx-swap="none" hx-encoding="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="mb-2">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" value="{{ pegawai['username'] }}" required minlength="3"
+            maxlength="50">
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Password (Biarkan kosong jika tidak ingin ubah)</label>
+        <input type="password" name="password" class="form-control" placeholder="******" minlength="4" maxlength="64">
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Nama Lengkap</label>
+        <input type="text" name="nama" class="form-control" value="{{ pegawai['nama_lengkap'] }}" required minlength="3"
+            maxlength="80">
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">NIP</label>
+        <input type="text" name="nip" class="form-control" value="{{ pegawai['nip'] }}" required minlength="5"
+            maxlength="20" pattern="\d+" inputmode="numeric">
+    </div>
+
+    <div class="mb-3 bg-warning bg-opacity-10 p-2 rounded">
+        <label class="form-label fw-bold"><i class="fas fa-key me-1"></i> PIN 6 Digit</label>
+        <input type="text" name="pin_6digit" class="form-control" value="{{ pegawai['pin_6digit'] }}" minlength="6"
+            maxlength="6" pattern="\d{6}" inputmode="numeric" required>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Jabatan / Role</label>
+        <select name="role" class="form-select">
+            <option value="staff" {% if pegawai['role']=='staff' %}selected{% endif %}>Staff Pelayanan</option>
+            <option value="hakim" {% if pegawai['role']=='hakim' %}selected{% endif %}>Hakim</option>
+            <option value="panitera" {% if pegawai['role']=='panitera' %}selected{% endif %}>Panitera</option>
+            <option value="sekretaris" {% if pegawai['role']=='sekretaris' %}selected{% endif %}>Sekretaris</option>
+            <option value="kassubag" {% if pegawai['role']=='kassubag' %}selected{% endif %}>Kassubag</option>
+            <option value="ketua" {% if pegawai['role']=='ketua' %}selected{% endif %}>Ketua Pengadilan</option>
+            <option value="wakil_ketua" {% if pegawai['role']=='wakil_ketua' %}selected{% endif %}>Wakil Ketua</option>
+            <option value="admin_it" {% if pegawai['role']=='admin_it' %}selected{% endif %}>Admin IT</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ganti Foto (Opsional)</label>
+        <input type="file" name="pas_foto" class="form-control form-control-sm" accept=".jpg,.png,.jpeg">
+        <small class="text-muted">Max 2MB. Foto saat ini: {{ pegawai['pas_foto'] if pegawai['pas_foto'] else 'Belum ada'
+            }}</small>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Update SK PNS (Opsional)</label>
+        <input type="file" name="pdf_sk_pns" class="form-control form-control-sm" accept=".pdf">
+        <small class="text-muted">Max 5MB. SK saat ini: {{ pegawai['pdf_sk_pns'] if pegawai['pdf_sk_pns'] else 'Belum
+            ada' }}</small>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="submit" class="btn btn-primary btn-anim">Simpan Perubahan</button>
+    </div>
+</form>

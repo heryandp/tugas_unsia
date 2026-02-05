@@ -35,21 +35,27 @@
   }
 
   function applyBodyClass(root) {
-    var el = root.querySelector("[data-body-class]");
-    if (!el) {
-      return;
+    // Priority: #htmx-meta, then any element with [data-body-class]
+    var el = root.querySelector("#htmx-meta") || root.querySelector("[data-body-class]");
+    if (!el) return;
+
+    var val = el.getAttribute("data-body-class");
+    if (val !== null) {
+      document.body.className = val;
     }
-    document.body.className = el.getAttribute("data-body-class") || "";
   }
 
   function applyBodyStyle(root) {
     var body = document.body;
-    var val = body.getAttribute("data-body-style") || "";
-    if (!val) {
-      body.style.cssText = "";
-      return;
+    var el = root.querySelector("#htmx-meta") || root.querySelector("[data-body-style]");
+    if (!el) return;
+
+    var val = el.getAttribute("data-body-style");
+    if (val !== null) {
+      // If we have specific new styles, we should apply them
+      // We overwrite existing styles if it's a "body-style" because usually it's used for page-specific backgrounds
+      body.style.cssText = val;
     }
-    body.style.cssText = val;
   }
 
   function scrollToHash() {
@@ -73,12 +79,15 @@
   });
 
   document.addEventListener("htmx:afterSwap", function (evt) {
-      if (evt.detail && evt.detail.target && evt.detail.target.id === "app") {
+    // Hanya proses jika ini adalah HTMX swap, bukan full page reload
+    if (evt.detail && evt.detail.requestConfig) {
+      if (evt.detail.target && evt.detail.target.id === "app") {
         applyBodyClass(evt.detail.target);
         applyBodyStyle(evt.detail.target);
         scrollToHash();
       }
-    });
+    }
+  });
 
   document.body.addEventListener("htmx:beforeRequest", function (evt) {
     var trigger = evt.detail && evt.detail.elt;
@@ -122,5 +131,37 @@
   document.body.addEventListener("toast", function (evt) {
     if (!evt.detail) return;
     showToast(evt.detail.level || "info", evt.detail.message || "");
+  });
+
+  document.body.addEventListener('htmx:configRequest', function (evt) {
+    var csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+    evt.detail.headers['X-CSRFToken'] = csrfToken;
+  });
+
+  // Handle closeModal event from server
+  document.body.addEventListener('closeModal', function (evt) {
+    const modalId = evt.detail.value || '#editModal'; // Default or from event
+    const modalEl = document.querySelector(modalId);
+    if (modalEl) {
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) {
+        modal.hide();
+      } else {
+        // Should not happen if correctly initialized, but fallback:
+        const m = new bootstrap.Modal(modalEl);
+        m.hide();
+      }
+    }
+  });
+
+  // Chat auto-scroll on new message via WS
+  document.body.addEventListener('htmx:wsAfterMessage', function (evt) {
+    const chatBox = document.getElementById("chat-box");
+    if (chatBox) {
+      // Smooth scroll to bottom
+      setTimeout(() => {
+        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+      }, 100);
+    }
   });
 })();

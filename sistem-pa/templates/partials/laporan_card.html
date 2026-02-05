@@ -5,7 +5,9 @@
       <div>
         <small class="me-2">{{ l['tanggal'] }}</small>
         {% if role == 'admin_it' %}
-        <a href="/hapus_data/laporan/{{ l['id'] }}" class="btn-delete" hx-get="/hapus_data/laporan/{{ l['id'] }}" hx-target="#laporan-{{ l['id'] }}" hx-swap="outerHTML" hx-confirm="Hapus laporan ini?"><i class="fas fa-trash"></i></a>
+        <button class="btn btn-link text-danger p-0" title="Hapus Data"
+          onclick="setDeleteUrl('/hapus_data/laporan/{{ l['id'] }}', 'Laporan dari: {{ l['nama_tamu'] }}')"><i
+            class="fas fa-trash"></i></button>
         {% endif %}
       </div>
     </div>
@@ -13,10 +15,12 @@
     {% if l['balasan'] %}
     <div class="alert alert-success py-2"><b>Balasan Anda:</b> {{ l['balasan'] }}</div>
     {% else %}
-    <form action="/balas_saran" method="POST" class="mt-2" hx-post="/balas_saran" hx-target="#laporan-{{ l['id'] }}" hx-swap="outerHTML">
+    <form action="/balas_saran" method="POST" class="mt-2" hx-post="/balas_saran" hx-target="#laporan-{{ l['id'] }}"
+      hx-swap="outerHTML">
       <input type="hidden" name="id_laporan" value="{{ l['id'] }}">
       <div class="input-group">
-        <input type="text" name="balasan" class="form-control" placeholder="Tulis balasan resmi..." required minlength="3" maxlength="500">
+        <input type="text" name="balasan" class="form-control" placeholder="Tulis balasan resmi..." required
+          minlength="3" maxlength="500">
         <button class="btn btn-danger" type="submit">KIRIM BALASAN</button>
       </div>
     </form>

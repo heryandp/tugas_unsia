@@ -1,14 +1,14 @@
 <!-- RUANG HAKIM -->
-  <h3 class="text-warning border-bottom pb-2 mb-3">Ruang Kerja Hakim (Mediasi & Putusan)</h3>
-  <div class="alert alert-info">
-    <i class="fas fa-info-circle me-2"></i>
-    <strong>Catatan:</strong> Tanggal sidang sudah diinput oleh Staff saat Pendaftaran.
-    Hakim hanya mengisi Hasil Mediasi & Putusan.
-  </div>
-  <div class="row">
-    {% for r in perkara %}
-      {% include "partials/hakim_card.html" %}
-    {% else %}
-    <p class="text-muted">Tidak ada perkara aktif.</p>
-    {% endfor %}
-  </div>
+<h3 class="sticky-dashboard-header text-warning">Ruang Kerja Hakim (Mediasi & Putusan)</h3>
+<div class="alert alert-info">
+  <i class="fas fa-info-circle me-2"></i>
+  <strong>Catatan:</strong> Tanggal sidang sudah diinput oleh Staff saat Pendaftaran.
+  Hakim hanya mengisi Hasil Mediasi & Putusan.
+</div>
+<div class="row">
+  {% for r in perkara %}
+  {% include "partials/hakim_card.html" %}
+  {% else %}
+  <p class="text-muted">Tidak ada perkara aktif.</p>
+  {% endfor %}
+</div>

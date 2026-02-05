@@ -3,36 +3,34 @@
 {% block body_class %}page-public page-info{% endblock %}
 {% block body_style %}--page-hero-bg: url("{{ p['bg_landing'] if p else '' }}");{% endblock %}
 {% block content %}
-<div data-body-class="">
-  {% include "partials/header.html" %}
-  <section class="page-hero">
-    <div class="container">
-      <h1 class="fw-bold mb-2">Sejarah Pengadilan</h1>
-      <p class="mb-0">Ringkasan perjalanan dan tonggak penting Pengadilan Agama Ibukota Nusantara.</p>
-    </div>
-  </section>
-  <div class="container my-5">
-    <div class="card shadow rounded-3 p-4 border-0">
-      <h3 class="text-success mb-3">Latar Belakang</h3>
-      <p class="text-muted">
-        Pengadilan Agama Ibukota Nusantara dibentuk untuk menghadirkan layanan peradilan yang modern,
-        cepat, dan transparan di pusat pemerintahan baru Indonesia. Seiring berkembangnya kebutuhan
-        masyarakat, pengadilan ini mengutamakan digitalisasi layanan agar proses perkara menjadi
-        lebih efektif dan akuntabel.
-      </p>
-      <h4 class="text-success mt-4">Perkembangan Utama</h4>
-      <ul class="text-muted">
-        <li>Modernisasi layanan melalui sistem informasi terintegrasi.</li>
-        <li>Penguatan tata kelola dan keamanan data perkara.</li>
-        <li>Transparansi jadwal sidang dan informasi publik.</li>
-      </ul>
-      <h4 class="text-success mt-4">Komitmen Ke Depan</h4>
-      <p class="text-muted mb-0">
-        Pengadilan Agama IKN berkomitmen menjaga kepercayaan publik melalui pelayanan yang profesional,
-        berintegritas, dan berbasis teknologi.
-      </p>
-    </div>
+{% include "partials/header.html" %}
+<section class="page-hero">
+  <div class="container">
+    <h1 class="fw-bold mb-2">Sejarah Pengadilan</h1>
+    <p class="mb-0">Ringkasan perjalanan dan tonggak penting Pengadilan Agama Ibukota Nusantara.</p>
   </div>
-  {% include "partials/footer.html" %}
+</section>
+<div class="container my-5">
+  <div class="card shadow rounded-3 p-4 border-0">
+    <h3 class="text-success mb-3">Latar Belakang</h3>
+    <p class="text-muted">
+      Pengadilan Agama Ibukota Nusantara dibentuk untuk menghadirkan layanan peradilan yang modern,
+      cepat, dan transparan di pusat pemerintahan baru Indonesia. Seiring berkembangnya kebutuhan
+      masyarakat, pengadilan ini mengutamakan digitalisasi layanan agar proses perkara menjadi
+      lebih efektif and akuntabel.
+    </p>
+    <h4 class="text-success mt-4">Perkembangan Utama</h4>
+    <ul class="text-muted">
+      <li>Modernisasi layanan melalui sistem informasi terintegrasi.</li>
+      <li>Penguatan tata kelola dan keamanan data perkara.</li>
+      <li>Transparansi jadwal sidang dan informasi publik.</li>
+    </ul>
+    <h4 class="text-success mt-4">Komitmen Ke Depan</h4>
+    <p class="text-muted mb-0">
+      Pengadilan Agama IKN berkomitmen menjaga kepercayaan publik melalui pelayanan yang profesional,
+      berintegritas, and berbasis teknologi.
+    </p>
+  </div>
 </div>
+{% include "partials/footer.html" %}
 {% endblock %}

@@ -3,36 +3,36 @@
 {% block body_class %}page-verify-pin d-flex align-items-center justify-content-center{% endblock %}
 {% block body_style %}--page-bg: url("{{ bg }}");{% endblock %}
 {% block content %}
-<div data-body-class="d-flex align-items-center justify-content-center">
-  <div class="pin-card">
-    <img src="{{ logo }}" class="logo-img" alt="Logo" loading="lazy">
-    <div class="pin-title">
-      <i class="fas fa-lock me-2"></i> VERIFIKASI PIN
-    </div>
-    <div class="pin-subtitle">
-      Masukkan PIN 6 Digit Anda untuk Akses Dashboard
-    </div>
-    {% if error %}
-    <div class="error-msg">
-      <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
-    </div>
-    {% endif %}
-    <form method="POST">
-      <div class="mb-3">
-        <input type="password" name="pin" class="form-control" minlength="6" maxlength="6" pattern="\d{6}" inputmode="numeric" placeholder="******" required autofocus autocomplete="off">
-        <small class="text-muted d-block mt-2">
-          <i class="fas fa-info-circle me-1"></i> PIN 6 digit hanya angka (0-9)
-        </small>
-      </div>
-      <button type="submit" class="btn-verify">
-        <i class="fas fa-check-circle me-2"></i> VERIFIKASI & MASUK
-      </button>
-    </form>
-    <a href="/logout" class="back-link">
-      <i class="fas fa-arrow-left me-1"></i> Kembali ke Login
-    </a>
+<div class="pin-card">
+  <img src="{{ logo }}" class="logo-img" alt="Logo" loading="lazy">
+  <div class="pin-title">
+    <i class="fas fa-lock me-2"></i> VERIFIKASI PIN
   </div>
-  <div class="copyright">
+  <div class="pin-subtitle">
+    Masukkan PIN 6 Digit Anda untuk Akses Dashboard
   </div>
+  {% if error %}
+  <div class="error-msg">
+    <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+  </div>
+  {% endif %}
+  <form method="POST" hx-boost="false">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="mb-3">
+      <input type="password" name="pin" class="form-control" minlength="6" maxlength="6" pattern="\d{6}"
+        inputmode="numeric" placeholder="******" required autofocus autocomplete="off">
+      <small class="text-muted d-block mt-2">
+        <i class="fas fa-info-circle me-1"></i> PIN 6 digit hanya angka (0-9)
+      </small>
+    </div>
+    <button type="submit" class="btn-verify btn-anim">
+      <i class="fas fa-check-circle me-2"></i> VERIFIKASI & MASUK
+    </button>
+  </form>
+  <a href="/logout" class="back-link">
+    <i class="fas fa-arrow-left me-1"></i> Kembali ke Login
+  </a>
+</div>
+<div class="copyright">
 </div>
 {% endblock %}

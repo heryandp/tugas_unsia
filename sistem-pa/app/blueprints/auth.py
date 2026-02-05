@@ -3,6 +3,7 @@ import string
 import time
 
 from flask import Blueprint, redirect, render_template, request, session, url_for
+from werkzeug.security import check_password_hash
 
 from ..db import get_db
 
@@ -90,10 +91,10 @@ def login():
             error = "Captcha Salah! Hitung/Ketik dengan benar."
         else:
             user = conn.execute(
-                "SELECT * FROM users WHERE username = ? AND password= ?",
-                (user_in, pass_in),
+                "SELECT * FROM users WHERE username = ? AND is_deleted=0",
+                (user_in,),
             ).fetchone()
-            if user:
+            if user and check_password_hash(user["password"], pass_in):
                 session["user_id"] = user["id"]
                 session["role"] = user["role"]
                 session["nama"] = user["nama_lengkap"]

@@ -62,7 +62,7 @@ def get_default_logo():
             return "data:image/x-icon;base64," + base64.b64encode(logo_data).decode("utf-8")
     except Exception:
         pass
-    return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Logo_Mahkamah_Agung_RI.png/100px-Logo_Mahkamah_Agung_RI.png"
+    return "https://upload.wikimedia.org/wikipedia/commons/4/49/Mahkamah_Agung_insignia.svg"
 
 
 def sanitize_text(value, max_len=2000):

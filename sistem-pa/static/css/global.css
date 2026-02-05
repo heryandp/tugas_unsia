@@ -48,6 +48,8 @@
   color: white;
   padding: 15px 0;
   border-bottom: 5px solid var(--pa-gold);
+  position: relative;
+  z-index: 999;
 }
 .page-public .header-content {
   display: flex;
@@ -72,13 +74,16 @@
   color: #ddd;
 }
 .page-public .navbar {
-  background-color: var(--pa-green) !important;
+  background-color: #ffffff !important;
   padding: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  border-top: 3px solid var(--pa-gold);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-top: none;
+  position: sticky !important;
+  top: 0;
+  z-index: 1000;
 }
 .page-public .nav-link {
-  color: #ffffff !important;
+  color: var(--pa-green) !important;
   font-weight: 600;
   padding: 15px 20px !important;
   text-transform: uppercase;
@@ -87,32 +92,32 @@
 }
 .page-public .nav-link:hover,
 .page-public .nav-link:focus {
-  background-color: var(--pa-gold);
-  color: var(--pa-green) !important;
+  background-color: var(--pa-green);
+  color: #ffffff !important;
 }
 .page-public .dropdown-menu {
-  background-color: var(--pa-green);
-  border: 2px solid var(--pa-gold);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  background-color: #ffffff;
+  border: 2px solid var(--pa-green);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .page-public .dropdown-item {
-  color: #ffffff;
+  color: var(--pa-green);
   font-weight: 500;
   padding: 10px 20px;
 }
 .page-public .dropdown-item:hover,
 .page-public .dropdown-item:focus {
-  background-color: var(--pa-gold);
-  color: var(--pa-green);
+  background-color: var(--pa-green);
+  color: #ffffff;
 }
 .page-public .dropdown-divider {
-  border-color: var(--pa-gold);
+  border-color: #dee2e6;
   opacity: 0.5;
 }
 /* Active nav link */
 .page-public .nav-link.active {
-  background-color: rgba(255, 215, 0, 0.2);
-  border-bottom: 3px solid var(--pa-gold);
+  background-color: var(--pa-green);
+  color: #ffffff !important;
 }
 
 .page-public footer {
@@ -130,20 +135,74 @@
 
 /* 3. Landing page hero */
 .page-landing .hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), var(--page-hero-bg);
+  background: linear-gradient(135deg, rgba(0, 77, 0, 0.85) 0%, rgba(0, 40, 0, 0.9) 100%), var(--page-hero-bg);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  height: 600px;
+  min-height: 650px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: white;
+  position: relative;
+  overflow: hidden;
 }
-.page-landing .hero h1 {
-  color: var(--pa-gold);
-  margin-bottom: 1rem;
+.page-landing .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+}
+.page-landing .hero .hero-badge {
+  animation: fadeInDown 0.8s ease-out 0.2s both;
+}
+.page-landing .hero .hero-title {
+  color: #ffffff;
+  text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+  letter-spacing: 2px;
+}
+.page-landing .hero .hero-divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--pa-gold), transparent);
+  margin: 0 auto;
+  animation: expandWidth 1s ease-out 0.6s both;
+}
+.page-landing .hero .hero-cta {
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+.page-landing .hero .hero-stats {
+  animation: fadeIn 1s ease-out 1s both;
+}
+.page-landing .hero .stat-number {
+  font-size: 2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.page-landing .hero .stat-label {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes expandWidth {
+  from { width: 0; opacity: 0; }
+  to { width: 80px; opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .page-landing .hero h3 {
   margin-bottom: 1.5rem;
@@ -650,4 +709,24 @@ body.page-login {
 /* Shadow inner utility */
 .shadow-inner {
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* 12. Dashboard Sticky Utilities */
+.page-dashboard .sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1020;
+}
+
+.sticky-dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 1010;
+  background-color: var(--bs-body-bg, #fff); /* Use Bootstrap var or fallback to white */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--pa-green);
+  margin-bottom: 1rem;
 }

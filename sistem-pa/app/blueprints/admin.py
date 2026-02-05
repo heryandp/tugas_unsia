@@ -1,5 +1,7 @@
 import os
+import uuid
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 
 import json
 
@@ -134,19 +136,24 @@ def tambah_user():
         pdf_name = secure_filename(f"SK_{nip}_{pdf_sk.filename}")
         pdf_sk.save(os.path.join(current_app.config["UPLOAD_FOLDER"], pdf_name))
     conn = get_db()
-    existing = conn.execute("SELECT id FROM users WHERE username=?", (u,)).fetchone()
+    existing = conn.execute("SELECT id FROM users WHERE username=? AND is_deleted=0", (u,)).fetchone()
     if existing:
         return _error_redirect("Username sudah digunakan.", "dashboard.admin")
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    creator = session.get("nama", "System")
     conn.execute(
-        "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)",
-        (u, p, r, n, nip, foto_name, pin, pdf_name),
+        "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, NULL, ?, ?, NULL, NULL)",
+        (str(uuid.uuid4()), u, generate_password_hash(p), r, n, nip, foto_name, pin, pdf_name, now, creator),
     )
     conn.commit()
     flash("Pegawai baru berhasil ditambahkan.", "success")
     if request.headers.get("HX-Request"):
         resp = make_response("", 204)
         resp.headers["HX-Trigger"] = json.dumps(
-            {"toast": {"level": "success", "message": "Pegawai baru berhasil ditambahkan."}}
+            {
+                "toast": {"level": "success", "message": "Pegawai baru berhasil ditambahkan."},
+                "closeModal": {"value": "#addUserModal"}
+            }
         )
         return resp
     return redirect(url_for("dashboard.admin"))
@@ -175,14 +182,20 @@ def tambah_berita():
         gambar.save(os.path.join(current_app.config["UPLOAD_FOLDER"], gambar_name))
         gambar_name = f"/uploads/{gambar_name}"
     conn = get_db()
-    cur = conn.execute("INSERT INTO berita VALUES (NULL, ?, ?, ?, ?)", (judul, isi, gambar_name, tgl))
+    new_id = str(uuid.uuid4())
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    creator = session.get("nama", "System")
+    conn.execute("INSERT INTO berita VALUES (?, ?, ?, ?, ?, 0, NULL, ?, ?, NULL, NULL)", (new_id, judul, isi, gambar_name, tgl, now, creator))
     conn.commit()
     flash("Berita berhasil diposting.", "success")
     if request.headers.get("HX-Request"):
-        b = conn.execute("SELECT * FROM berita WHERE id=?", (cur.lastrowid,)).fetchone()
+        b = conn.execute("SELECT * FROM berita WHERE id=?", (new_id,)).fetchone()
         resp = make_response(render_template("partials/berita_row.html", b=b))
         resp.headers["HX-Trigger"] = json.dumps(
-            {"toast": {"level": "success", "message": "Berita berhasil diposting."}}
+            {
+                "toast": {"level": "success", "message": "Berita berhasil diposting."},
+                "closeModal": {"value": "#addNewsModal"}
+            }
         )
         return resp
     return redirect(url_for("dashboard.admin"))
@@ -208,14 +221,20 @@ def tambah_galeri():
         foto.save(os.path.join(current_app.config["UPLOAD_FOLDER"], foto_name))
         foto_name = f"/uploads/{foto_name}"
     conn = get_db()
-    cur = conn.execute("INSERT INTO galeri VALUES (NULL, ?, ?, ?)", (judul, foto_name, tgl))
+    new_id = str(uuid.uuid4())
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    creator = session.get("nama", "System")
+    conn.execute("INSERT INTO galeri VALUES (?, ?, ?, ?, 0, NULL, ?, ?, NULL, NULL)", (new_id, judul, foto_name, tgl, now, creator))
     conn.commit()
     flash("Foto galeri berhasil diunggah.", "success")
     if request.headers.get("HX-Request"):
-        g = conn.execute("SELECT * FROM galeri WHERE id=?", (cur.lastrowid,)).fetchone()
+        g = conn.execute("SELECT * FROM galeri WHERE id=?", (new_id,)).fetchone()
         resp = make_response(render_template("partials/galeri_row.html", g=g))
         resp.headers["HX-Trigger"] = json.dumps(
-            {"toast": {"level": "success", "message": "Foto galeri berhasil diunggah."}}
+            {
+                "toast": {"level": "success", "message": "Foto galeri berhasil diunggah."},
+                "closeModal": {"value": "#addGalleryModal"}
+            }
         )
         return resp
     return redirect(url_for("dashboard.admin"))
