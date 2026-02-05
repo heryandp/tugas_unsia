@@ -1,60 +1,92 @@
-# Sistem Informasi Pengadilan Agama Ibukota Nusantara (Sistem-PA IKN)
+# 🏛️ Sistem Informasi Pengadilan Agama Ibukota Nusantara (Sistem-PA IKN)
 
-Sistem informasi terintegrasi untuk mendukung manajemen perkara perceraian di Pengadilan Agama Ibukota Nusantara, dengan fokus pada otomasi proses, keamanan berlapis, dan transparansi pelayanan publik.
+[![Flask](https://img.shields.io/badge/Flask-2.3+-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5.3-7952b3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![HTMX](https://img.shields.io/badge/HTMX-1.9-3366cc?style=for-the-badge)](https://htmx.org/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+
+Sistem informasi terintegrasi untuk mendukung manajemen perkara perceraian di Pengadilan Agama Ibukota Nusantara. Berfokus pada otomasi proses, keamanan berlapis (2FA-like PIN), dan transparansi pelayanan publik menggunakan teknologi web modern.
+
+---
 
 ## 🚀 Fitur Utama
 
-*   **Manajemen Perkara**: Pendaftaran dan pelacakan perkara peceraian (Cerai Talak & Cerai Gugat).
-*   **Otomasi Dokumen**: Penerbitan Akta Cerai otomatis dengan tanda tangan digital (Barcode/QR).
-*   **Keamanan Berlapis**: Autentikasi menggunakan password dan verifikasi PIN 6-digit.
-*   **Dashboard Multi-Role**: Akses khusus untuk Admin IT, Ketua, Hakim, Panitera, Staff, dan Publik.
-*   **Real-time Chat**: Komunikasi internal antar pegawai menggunakan Flask-Sock (Websockets).
-*   **Portal Publik**: Jadwal sidang real-time dan profil pegawai yang dapat diakses masyarakat tanpa login.
-*   **Ekspor Data**: Mendukung ekspor ke format PDF, Docx (Word), dan XLSX (Excel).
+-   **⚡ HTMX No-Reload UI**: Pengalaman pengguna yang mulus tanpa refresh halaman pada setiap aksi CRUD.
+-   **💬 Real-time Chatroom**: Komunikasi internal antar pegawai berbasis WebSockets (Flask-Sock).
+-   **📑 Manajemen Perkara & Akta**: Pendaftaran, pelacakan, dan penerbitan otomatis dokumen hukum (PDF/Word).
+-   **🛡️ Keamanan Berlapis**: Autentikasi ganda (Password + PIN 6-Digit) untuk perlindungan data sensitif.
+-   **📊 Dashboard Multi-Role**: Hak akses spesifik untuk Admin IT, Ketua, Hakim, Panitera, Staff, dan Publik.
+-   **🌐 Pelayanan Publik**: Portal mandiri untuk masyarakat mengecek jadwal sidang dan profil pegawai.
+-   **🔍 Auto-Generated API Docs**: Dokumentasi API interaktif menggunakan Swagger UI.
+
+---
 
 ## 🛠️ Tech Stack
 
-*   **Backend**: Python, Flask
-*   **Database**: SQLite
-*   **Frontend**: HTML5, Vanilla CSS, Bootstrap 5, HTMX
-*   **Real-time**: Flask-Sock (Websockets)
-*   **Containerization**: Docker & Docker Compose
+-   **Backend**: Python 3.11, Flask
+-   **Database**: SQLite (UUID-based PKs, Soft Delete, Audit Columns)
+-   **Frontend**: HTML5, CSS3, Bootstrap 5, HTMX
+-   **Docs**: Flask-Swagger, Flask-Smorest (OpenAPI Spec)
+-   **Deployment**: Gunicorn (WSGI), Docker, Nginx
 
-## 📦 Instalasi & Menjalankan Lokal
+---
 
-1. **Clone Repository**
+## 📦 Instalasi & Pengoperasian
+
+### Running Locally (Development)
+
+1. **Clone Repo & Masuk ke Folder**
    ```bash
    git clone https://github.com/heryandp/tugas_unsia.git
    cd tugas_unsia/sistem-pa
    ```
 
-2. **Buat Virtual Environment (Opsional tapi disarankan)**
+2. **Setup .env**
    ```bash
-   python -m venv env
-   source env/bin/scripts/activate  # Untuk Windows: env\Scripts\activate
+   cp .env.example .env
+   # Edit .env dan masukkan SECRET_KEY
    ```
 
-3. **Install Dependensi**
+3. **Install & Run**
    ```bash
    pip install -r requirements.txt
-   ```
-
-4. **Jalankan Aplikasi**
-   ```bash
    python app.py
    ```
-   Buka `http://127.0.0.1:5000` di browser Anda.
 
-## 🔐 Kredensial Default (Development)
+### Running via Docker (Production)
+
+```bash
+# Build & Run Detached
+docker-compose up -d --build
+```
+Aplikasi akan berjalan di port `5000` dengan persistent volume untuk database dan media upload.
+
+---
+
+## 📖 Dokumentasi API
+
+Interaksi API dapat dipelajari melalui Swagger UI yang tersedia di:
+-   **Core App Docs**: `http://localhost:5000/docs`
+-   **API Blueprint**: `http://localhost:5000/docs/swagger-ui`
+-   **JSON Spec**: `/spec` atau `/docs/openapi.json`
+
+---
+
+## 🔐 Kredensial Default
 
 | Role | Username | Password | PIN |
 | :--- | :--- | :--- | :--- |
-| **Super Admin** | admin | admin123 | 000000 |
-| **Ketua** | ketua | 123 | 123456 |
-| **Hakim** | hakim | 123 | 123456 |
+| **Admin IT** | `admin` | `admin123` | `000000` |
+| **Ketua** | `ketua` | `123` | `123456` |
+| **Staff** | `staff` | `123` | `123456` |
 
-## 📝 Catatan Pengembangan
-Proyek ini dikembangkan sebagai bagian dari tugas perkuliahan (Tugas UNSIA).
+---
+
+## � Dokumentasi Teknis
+Detail lebih lanjut mengenai arsitektur, skema database, dan panduan deployment dapat ditemukan di folder `docs/`:
+-   [`PROJECT_CHARTER.md`](docs/PROJECT_CHARTER.md)
+-   [`TECHNICAL.md`](docs/TECHNICAL.md)
+-   [`API.md`](docs/API.md)
 
 ---
 © 2026 - Pengadilan Agama Ibukota Nusantara
